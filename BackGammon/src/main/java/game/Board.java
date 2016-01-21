@@ -1,7 +1,10 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
+import gui.GameController;
 import states.BlackBarState;
 import states.BlackBearOffState;
 import states.BlackState;
@@ -13,6 +16,8 @@ import states.RedBearOffState;
 public class Board {
 	private static Board instance = new Board();
 	private Stack<Checker>[] points;
+	
+	private GameController gc = null;
 
 	private GameState redState = new RedState();
 	private GameState redBarState = new RedBarState();
@@ -20,6 +25,17 @@ public class Board {
 	private GameState blackState = new BlackState();
 	private GameState blackBarState = new BlackBarState();
 	private GameState blackBearOffState = new BlackBearOffState();
+	
+	private List<Checker> redCheckers = new ArrayList<Checker>();
+	private List<Checker> blackCheckers = new ArrayList<Checker>();
+
+	public List<Checker> getRedCheckers() {
+		return redCheckers;
+	}
+	
+	public List<Checker> getBlackCheckers() {
+		return blackCheckers;
+	}
 
 	public GameState getRedState() {
 		return redState;
@@ -45,6 +61,10 @@ public class Board {
 		return blackBearOffState;
 	}
 
+	public void setGameController(GameController gameController){
+		gc = gameController;
+	}
+	
 	private GameState state;
 
 	public static Board getInstance() {
@@ -71,23 +91,37 @@ public class Board {
 	}
 
 	public void setUp() {
+		redCheckers.clear();
+		blackCheckers.clear();
 		for (Stack<Checker> s : points) {
 			s.clear();
 		}
 		int[] redSetupPoints = new int[] { 1, 12, 17, 19 };
-		int[] redCheckers = new int[] { 2, 5, 3, 5 };
+		int[] noOfRedCheckers = new int[] { 2, 5, 3, 5 };
 		int[] blackSetupPoints = new int[] { 6, 8, 13, 24 };
-		int[] blackCheckers = new int[] { 5, 3, 5, 2 };
+		int[] noOfBlackCheckers = new int[] { 5, 3, 5, 2 };
 
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < redCheckers[i]; j++) {
-				points[redSetupPoints[i]].add(new Checker(Constant.RED));
+			for (int j = 0; j < noOfRedCheckers[i]; j++) {
+				Checker r = new Checker(Constant.RED);
+				r.setPosition(redSetupPoints[i]);
+				if(gc!=null){
+					gc.drawChecker(r, Constant.RED);
+				}
+				points[redSetupPoints[i]].add(r);
+				redCheckers.add(r);
 			}
 		}
 
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < blackCheckers[i]; j++) {
-				points[blackSetupPoints[i]].add(new Checker(Constant.BLACK));
+			for (int j = 0; j < noOfBlackCheckers[i]; j++) {
+				Checker b = new Checker(Constant.BLACK);
+				b.setPosition(blackSetupPoints[i]);
+				if(gc!=null){
+					gc.drawChecker(b, Constant.BLACK);
+				}
+				points[blackSetupPoints[i]].add(b);
+				blackCheckers.add(b);
 			}
 		}
 	}
