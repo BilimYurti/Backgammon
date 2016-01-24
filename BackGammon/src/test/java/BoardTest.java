@@ -159,43 +159,40 @@ public class BoardTest {
 		assertFalse(board.move(22, mockDie));
 		assertTrue(board.move(19, 25));
 		assertTrue(board.move(22, mockDie));
+		assertFalse(board.move(25, 22));
 		
 		board.setState(board.getBlackBearOffState());
 		assertFalse(board.move(3, -2));
 		assertTrue(board.move(5, 0));
 		assertTrue(board.move(3, -2));
 		assertTrue(board.move(1, -5));
+		assertFalse(board.move(0, 1));
 		
 		assertEquals(3, board.getPoint()[0].size());
 		assertEquals(3, board.getPoint()[25].size());
 	}
 	
 	@Test
-	public void testSwitchToBearOffState(){
-		for(Stack<Checker> s: board.getPoint()){
-			s.clear();
-		}
-		
-		for(int i = 19; i < 25; i++){
-			board.getPoint()[i].add(new Checker(Constant.BLACK));
-			board.getPoint()[i].add(new Checker(Constant.BLACK));
-		}
-		board.getPoint()[17].add(new Checker(Constant.BLACK));
-		board.getPoint()[24].add(new Checker(Constant.BLACK));
-		board.getPoint()[24].add(new Checker(Constant.BLACK));
-		
+	public void testDetectBearOffState(){
+		board.setUp();
 		board.setState(board.getRedState());
 		
-		int checkers = 0;
-		for(Stack s: board.getPoint()){
-			checkers += s.size();
+		for (int i = 0; i < 5; i++) {
+			board.move(12, 18);
+			board.move(18, 23);
 		}
 		
-		assertEquals(15, checkers);
+		for(int i = 0; i < 2; i++){
+			board.move(1, 7);
+			board.move(7, 12);
+			board.move(12, 18);
+			board.move(18, 21);
+			board.move(17, 20);
+		}
 		
-		board.move(17, 19);
+		board.move(17, 20);
+		board.move(23, 25);
 		assertEquals(board.getRedBearOffState(), board.getState());
-		
 	}
 	
 

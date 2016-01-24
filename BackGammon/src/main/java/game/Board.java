@@ -13,7 +13,7 @@ import states.RedBarState;
 import states.RedState;
 import states.RedBearOffState;
 
-public class Board {
+public class Board implements Subject{
 	private static Board instance = new Board();
 	private Stack<Checker>[] points;
 	
@@ -28,6 +28,33 @@ public class Board {
 	
 	private List<Checker> redCheckers = new ArrayList<Checker>();
 	private List<Checker> blackCheckers = new ArrayList<Checker>();
+	
+	private ArrayList<Observer> observers = new ArrayList<>();
+
+	@Override
+	public void registerObserver(Observer o) {
+		observers.add(o);
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void notifyNewChecker(Checker checker){
+		for(Observer o: observers){
+			o.drawChecker(checker, checker.color);
+		}
+	}
+
+	@Override
+	public void notifyMove(Checker checker,int toPoint) {
+		for(Observer o: observers){
+			o.moveChecker(checker, toPoint);
+		}
+		
+	}
 
 	public List<Checker> getRedCheckers() {
 		return redCheckers;
@@ -61,10 +88,6 @@ public class Board {
 		return blackBearOffState;
 	}
 
-	public void setGameController(GameController gameController){
-		gc = gameController;
-	}
-	
 	private GameState state;
 
 	public static Board getInstance() {
@@ -105,9 +128,7 @@ public class Board {
 			for (int j = 0; j < noOfRedCheckers[i]; j++) {
 				Checker r = new Checker(Constant.RED);
 				r.setPosition(redSetupPoints[i]);
-				if(gc!=null){
-					gc.drawChecker(r, Constant.RED);
-				}
+				notifyNewChecker(r);
 				points[redSetupPoints[i]].add(r);
 				redCheckers.add(r);
 			}
@@ -117,9 +138,7 @@ public class Board {
 			for (int j = 0; j < noOfBlackCheckers[i]; j++) {
 				Checker b = new Checker(Constant.BLACK);
 				b.setPosition(blackSetupPoints[i]);
-				if(gc!=null){
-					gc.drawChecker(b, Constant.BLACK);
-				}
+				notifyNewChecker(b);
 				points[blackSetupPoints[i]].add(b);
 				blackCheckers.add(b);
 			}
@@ -127,27 +146,64 @@ public class Board {
 	}
 
 	public boolean move(int fromPoint, int toPoint) {
+		detectBearOffState();
+		System.out.println(points[fromPoint].peek().color+"from:" +fromPoint+"  to:"+toPoint);
+		Checker checker;
 		switch (state.testMove(fromPoint, toPoint)) {
 		// invalid move
 		case -1:
 			return false;
 		// hit
 		case 0:
-			points[opponentBar()].add(points[toPoint].pop());
-			points[toPoint].add(points[fromPoint].pop());
+			Checker hitChecker = points[toPoint].pop();
+			points[opponentBar()].add(hitChecker);
+			hitChecker.setPosition(opponentBar());
+			notifyMove(hitChecker, opponentBar());
+			checker = points[fromPoint].pop();
+			points[toPoint].add(checker);
+			checker.setPosition(toPoint);
+			notifyMove(checker, toPoint);
 			return true;
 		// valid move
 		case 1:
-			points[toPoint].add(points[fromPoint].pop());
+			checker = points[fromPoint].pop();
+			points[toPoint].add(checker);
+			checker.setPosition(toPoint);
 			return true;
 		// Bear-off move exeeding bounds	
 		case 2:
-			points[state.getColor()].add(points[fromPoint].pop());
+			checker = points[fromPoint].pop();
+			points[state.getColor()].add(checker);
+			checker.setPosition(toPoint);
+			notifyMove(checker, toPoint);
 			return true;
 		default:
 			return false;
 		}
 
+	}
+
+	private void detectBearOffState() {
+		boolean bearOff = true;
+		if (state.getColor() == Constant.BLACK) {
+			for(Checker c: blackCheckers){
+				if(c.getPosition()>6){
+					bearOff = false;
+				}
+			}
+			if(bearOff){
+				setState(getBlackBearOffState());
+			}
+		} else{
+			for(Checker c: redCheckers){
+				if(c.getPosition()<19){
+					bearOff = false;
+				}
+			}
+			if(bearOff){
+				setState(getRedBearOffState());
+			}
+		}
 	}
 
 	private int opponentBar() {

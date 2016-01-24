@@ -1,24 +1,35 @@
 package gui;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.Map.Entry;
 
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.scene.BoundsAccessor;
+
 import game.Board;
 import game.Checker;
 import game.Constant;
+import game.Observer;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -32,7 +43,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
-public class GameController implements Initializable {
+public class GameController implements Initializable, Observer {
 
 	private Stage stage;
 	private AnchorPane ap;
@@ -98,7 +109,9 @@ public class GameController implements Initializable {
 	Board board = Board.getInstance();
 	Stack[] points = board.getPoint();
 	Map<Integer, Shape> pointMap;
+	Map<Shape, Integer> shapeIndexMap;
 	Map<Circle, Checker> checkerMap;
+	Map<Checker, Circle> circleMap;
 
 	Point2D dragAnchor;
 	private double initX;
@@ -113,23 +126,29 @@ public class GameController implements Initializable {
 				stack22, stack23, stack24, stack25, stack26, stack27 };
 
 		pointMap = new HashMap<Integer, Shape>();
+		shapeIndexMap = new HashMap<Shape, Integer>();
 
 		for (int i = 0; i < 28; i++) {
 			pointMap.put(new Integer(i), polygon[i]);
+			shapeIndexMap.put(polygon[i], new Integer(i));
 		}
-		checkerMap = new HashMap<Circle, Checker>();
-		
-		board.setGameController(this);
+		checkerMap = new HashMap<>();
+		circleMap = new HashMap<>();
+
+		board.registerObserver(this);
 		board.setUp();
+		board.setState(board.getRedState());
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
 
 	}
 
+	@Override
 	public void drawChecker(Checker checker, int color) {
 		Circle c = createChecker(color);
 		checkerMap.put(c, checker);
+		circleMap.put(checker, c);
 		placeOnStack(c, checker.getPosition());
 	}
 
@@ -185,6 +204,7 @@ public class GameController implements Initializable {
 						&& (newYPosition <= (ap.getHeight() - checker.getRadius()))) {
 					checker.setTranslateY(newYPosition);
 				}
+				event.consume();
 			}
 		});
 
@@ -193,16 +213,34 @@ public class GameController implements Initializable {
 				initX = checker.getTranslateX();
 				initY = checker.getTranslateY();
 				dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
+				me.consume();
 			}
 		});
-		
+
 		checker.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
-				
+				Boolean insideShape;
+				Boolean acceptedMove = false;
+				for (Shape s : polygon) {
+					insideShape = s.getBoundsInParent().contains(new Point2D(event.getSceneX(), event.getSceneY()));
+					if (insideShape) {
+						int startPos = checkerMap.get(checker).getPosition();
+						int targetPos = shapeIndexMap.get(s);
+						placeOnStack(checker, targetPos);
+						acceptedMove = board.move(startPos, targetPos);
+						break;
+					}
+				}
+				if (!acceptedMove) {
+					checker.setTranslateX(initX);
+					checker.setTranslateY(initY);
+				}
+				event.consume();
 			}
-			
+
 		});
+
 		ap.getChildren().add(checker);
 		return checker;
 	}
@@ -211,35 +249,41 @@ public class GameController implements Initializable {
 		Shape targetShape = pointMap.get(point);
 		double pointX = targetShape.getLayoutX();
 		double pointY = targetShape.getLayoutY();
-		
+
 		int checkersInStack = points[point].size();
-		
-		boolean lowerBoard = point>= Constant.BLACK && point < 13 || point == Constant.REDBAR;
-		
+
+		boolean lowerBoard = point >= Constant.BLACK && point < 13 || point == Constant.REDBAR;
+
 		if (lowerBoard) {
-			if(point == Constant.REDBAR){
+			if (point == Constant.REDBAR) {
 				pointX += 35;
-				pointY += 25; 
-			}else if(point == Constant.BLACK){
+				pointY += 25;
+			} else if (point == Constant.BLACK) {
 				pointX += 100;
 				pointY += 200;
-			}else
-			pointY += 4 * checker.getRadius() - (1.5*checker.getRadius()*checkersInStack);
-		}else{
-			if(point == Constant.BLACKBAR){
+			} else
+				pointY += 4 * checker.getRadius() - (1.5 * checker.getRadius() * checkersInStack);
+		} else {
+			if (point == Constant.BLACKBAR) {
 				pointX += 35;
 				pointY += +205;
-			}else if(point == Constant.RED){
+			} else if (point == Constant.RED) {
 				pointX += 100;
 				pointY += 25;
-			}
-			else{
-			pointY += -5 * checker.getRadius() + (1.5*checker.getRadius()*checkersInStack);
+			} else {
+				pointY += -5 * checker.getRadius() + (1.5 * checker.getRadius() * checkersInStack);
 			}
 		}
-		
+
 		checker.setTranslateX(pointX);
 		checker.setTranslateY(pointY);
 
 	}
+
+	@Override
+	public void moveChecker(Checker checker, int toPoint) {
+		Circle c = circleMap.get(checker);
+		placeOnStack(c, toPoint);
+	}
+
 }
