@@ -106,6 +106,7 @@ public class Board implements Subject{
 	}
 
 	public void setState(GameState state) {
+		System.out.println(state.toString());
 		this.state = state;
 	}
 
@@ -147,7 +148,7 @@ public class Board implements Subject{
 
 	public boolean move(int fromPoint, int toPoint) {
 		detectBearOffState();
-		System.out.println(points[fromPoint].peek().color+"from:" +fromPoint+"  to:"+toPoint);
+		System.out.println("from:" +fromPoint+"  to:"+toPoint);
 		Checker checker;
 		switch (state.testMove(fromPoint, toPoint)) {
 		// invalid move

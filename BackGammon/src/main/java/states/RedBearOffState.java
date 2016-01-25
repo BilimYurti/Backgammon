@@ -7,7 +7,7 @@ import game.Constant;
 public class RedBearOffState implements GameState {
 
 	public int testMove(int fromPoint, int toPoint) {
-		if (ownChecker(fromPoint, getColor())) {
+		if (ownChecker(fromPoint, getColor()) && direction(fromPoint, toPoint, getColor())) {
 			if (inBearOffRange(toPoint, getColor())) {
 				if (emptyOrOwnPoint(toPoint, getColor())) {
 					return 1;
@@ -28,6 +28,11 @@ public class RedBearOffState implements GameState {
 	public int getColor() {
 		// TODO Auto-generated method stub
 		return Constant.RED;
+	}
+	
+	@Override
+	public String toString(){
+		return "Red Bear-Off State";
 	}
 
 }

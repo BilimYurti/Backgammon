@@ -21,5 +21,9 @@ public class RedBarState implements GameState {
 	public int getColor() {
 		return Constant.RED;
 	}
-
+	
+	@Override
+	public String toString(){
+		return "Red Bar State";
+	}
 }

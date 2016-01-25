@@ -11,5 +11,7 @@ public interface GameState {
 	public int testMove(int fromPoint, int toPoint);
 	
 	public int getColor();
+	
+	public String toString();
 
 }

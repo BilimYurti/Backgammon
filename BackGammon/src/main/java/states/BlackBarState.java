@@ -22,5 +22,10 @@ public class BlackBarState implements GameState {
 	public int getColor() {
 		return Constant.BLACK;
 	}
+	
+	@Override
+	public String toString(){
+		return "Black Bar State";
+	}
 
 }
