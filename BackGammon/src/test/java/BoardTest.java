@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Stack;
 
 import org.junit.Test;
+import org.mockito.Mock;
 
 import game.Board;
 import game.Checker;
@@ -195,5 +196,37 @@ public class BoardTest {
 		assertEquals(board.getRedBearOffState(), board.getState());
 	}
 	
+	
+	@Test
+	public void testAreThereValidMoves(){
+		board.setUp();
+		
+		board.setState(board.getRedState());
+		board.move(1, 7);
+		board.move(1, 7);
+		board.move(7, 12);
+		board.move(7, 11);
+		board.setState(board.getBlackState());
+		board.move(8, 2);
+		board.move(8, 3);
+		board.move(8, 4);
+		board.move(6, 2);
+		board.move(6, 3);
+		board.move(6, 4);
+		board.move(13, 7);
+		board.move(13, 7);
+		board.move(7, 5);
+		board.move(7, 5);
+		board.move(13, 7);
+		board.setState(board.getRedBarState());
+			
+		when(mockDie.getValue()).thenReturn(4);
+		boolean case1 = board.areThereValidMoves(mockDie);
+		when(mockDie.getValue()).thenReturn(1);
+		boolean case2 = board.areThereValidMoves(mockDie);
+		
+		assertTrue(case2);
+		assertFalse(case1);
+	}
 
 }

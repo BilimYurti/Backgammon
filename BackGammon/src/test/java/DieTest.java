@@ -3,6 +3,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import game.Die;
+import gui.GameController;
+import javafx.scene.image.Image;
 
 public class DieTest {
 
@@ -22,5 +24,4 @@ public class DieTest {
 		Die d2 = new Die(d1);
 		assertEquals(d1.getValue(), d2.getValue());
 	}
-	
 }

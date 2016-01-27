@@ -13,7 +13,7 @@ import states.RedBarState;
 import states.RedState;
 import states.RedBearOffState;
 
-public class Board implements Subject{
+public class Board implements BoardSubject{
 	private static Board instance = new Board();
 	private Stack<Checker>[] points;
 	
@@ -161,15 +161,17 @@ public class Board implements Subject{
 			hitChecker.setPosition(opponentBar());
 			notifyMove(hitChecker, opponentBar());
 			checker = points[fromPoint].pop();
-			points[toPoint].add(checker);
 			checker.setPosition(toPoint);
 			notifyMove(checker, toPoint);
+			points[toPoint].add(checker);
+			outOfBar();
 			return true;
 		// valid move
 		case 1:
 			checker = points[fromPoint].pop();
 			points[toPoint].add(checker);
 			checker.setPosition(toPoint);
+			outOfBar();
 			return true;
 		// Bear-off move exeeding bounds	
 		case 2:
@@ -182,6 +184,15 @@ public class Board implements Subject{
 			return false;
 		}
 
+	}
+
+	private void outOfBar() {
+		if(state == getBlackBarstate() && points[Constant.BLACKBAR].isEmpty()){
+			setState(getBlackState());
+		}else if(state == getRedBarState() && points[Constant.REDBAR].isEmpty()){
+			setState(getRedState());
+		}
+		
 	}
 
 	private void detectBearOffState() {
@@ -216,6 +227,12 @@ public class Board implements Subject{
 
 	public boolean move(int fromPoint, Die die) {
 		int toPoint;
+		if(state == getBlackBarstate()){
+			return move(fromPoint, Constant.RED-die.getValue());
+		}
+		if(state == getRedBarState()){
+			return move(fromPoint, die.getValue());
+		}
 		if (state.getColor() == Constant.BLACK) {
 			toPoint = fromPoint - die.getValue();
 		} else {
@@ -237,6 +254,17 @@ public class Board implements Subject{
 			}else{
 				setState(redState);
 			}
+		}
+	}
+
+	public boolean areThereValidMoves(Die die) {
+		if(state == getBlackBarstate() && state.testMove(Constant.BLACKBAR, 25-die.getValue())!=-1){
+			return true;
+		}if(state == getRedBarState() && state.testMove(Constant.REDBAR, die.getValue())!=-1){
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 }

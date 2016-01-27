@@ -1,6 +1,6 @@
 package game;
 
-public interface Subject {
+public interface BoardSubject {
 	public void registerObserver(Observer o);
 	public void removeObserver(Observer o);
 	public void notifyNewChecker(Checker checker);

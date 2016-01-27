@@ -1,37 +1,30 @@
 package gui;
 
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Stack;
-import java.util.Map.Entry;
 
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.scene.BoundsAccessor;
+import com.sun.javafx.binding.StringFormatter;
 
 import game.Board;
 import game.Checker;
 import game.Constant;
+import game.Die;
+import game.Game;
 import game.Observer;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseDragEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -48,66 +41,46 @@ public class GameController implements Initializable, Observer {
 	private Stage stage;
 	private AnchorPane ap;
 
-	@FXML
-	Rectangle stack0;
-	@FXML
-	Polygon stack1;
-	@FXML
-	Polygon stack2;
-	@FXML
-	Polygon stack3;
-	@FXML
-	Polygon stack4;
-	@FXML
-	Polygon stack5;
-	@FXML
-	Polygon stack6;
-	@FXML
-	Polygon stack7;
-	@FXML
-	Polygon stack8;
-	@FXML
-	Polygon stack9;
-	@FXML
-	Polygon stack10;
-	@FXML
-	Polygon stack11;
-	@FXML
-	Polygon stack12;
-	@FXML
-	Polygon stack13;
-	@FXML
-	Polygon stack14;
-	@FXML
-	Polygon stack15;
-	@FXML
-	Polygon stack16;
-	@FXML
-	Polygon stack17;
-	@FXML
-	Polygon stack18;
-	@FXML
-	Polygon stack19;
-	@FXML
-	Polygon stack20;
-	@FXML
-	Polygon stack21;
-	@FXML
-	Polygon stack22;
-	@FXML
-	Polygon stack23;
-	@FXML
-	Polygon stack24;
-	@FXML
-	Rectangle stack25;
-	@FXML
-	Rectangle stack26;
-	@FXML
-	Rectangle stack27;
+	@FXML Rectangle stack0;
+	@FXML Polygon stack1;
+	@FXML Polygon stack2;
+	@FXML Polygon stack3;
+	@FXML Polygon stack4;
+	@FXML Polygon stack5;
+	@FXML Polygon stack6;
+	@FXML Polygon stack7;
+	@FXML Polygon stack8;
+	@FXML Polygon stack9;
+	@FXML Polygon stack10;
+	@FXML Polygon stack11;
+	@FXML Polygon stack12;
+	@FXML Polygon stack13;
+	@FXML Polygon stack14;
+	@FXML Polygon stack15;
+	@FXML Polygon stack16;
+	@FXML Polygon stack17;
+	@FXML Polygon stack18;
+	@FXML Polygon stack19;
+	@FXML Polygon stack20;
+	@FXML Polygon stack21;
+	@FXML Polygon stack22;
+	@FXML Polygon stack23;
+	@FXML Polygon stack24;
+	@FXML Rectangle stack25;
+	@FXML Rectangle stack26;
+	@FXML Rectangle stack27;
+	@FXML ImageView die1;
+	@FXML ImageView die2;
+	@FXML ImageView die3;
+	@FXML ImageView die4;
+	@FXML ImageView background;
+	
 
-	Shape[] polygon;
 	Board board = Board.getInstance();
+	Game game;
 	Stack[] points = board.getPoint();
+	Shape[] polygon;
+	ImageView[] guiDice;
 	Map<Integer, Shape> pointMap;
 	Map<Shape, Integer> shapeIndexMap;
 	Map<Circle, Checker> checkerMap;
@@ -120,10 +93,14 @@ public class GameController implements Initializable, Observer {
 	public void init(Stage stage, Parent root) {
 		this.stage = stage;
 		ap = (AnchorPane) root;
+		
+		background.setImage(new Image(ClassLoader.getSystemResourceAsStream("wood.jpg")));
 
 		polygon = new Shape[] { stack0, stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8, stack9, stack10,
 				stack11, stack12, stack13, stack14, stack15, stack16, stack17, stack18, stack19, stack20, stack21,
 				stack22, stack23, stack24, stack25, stack26, stack27 };
+		
+		guiDice = new ImageView[] {die1, die2, die3, die4};
 
 		pointMap = new HashMap<Integer, Shape>();
 		shapeIndexMap = new HashMap<Shape, Integer>();
@@ -138,6 +115,10 @@ public class GameController implements Initializable, Observer {
 		board.registerObserver(this);
 		board.setUp();
 		board.setState(board.getRedState());
+		game = new Game();
+		game.registerObserver(this);
+		rollDice();
+		
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -228,7 +209,7 @@ public class GameController implements Initializable, Observer {
 						int startPos = checkerMap.get(checker).getPosition();
 						int targetPos = shapeIndexMap.get(s);
 						placeOnStack(checker, targetPos);
-						acceptedMove = board.move(startPos, targetPos);
+						acceptedMove = game.move(startPos, targetPos);
 						break;
 					}
 				}
@@ -257,7 +238,7 @@ public class GameController implements Initializable, Observer {
 		if (lowerBoard) {
 			if (point == Constant.REDBAR) {
 				pointX += 35;
-				pointY += 25;
+				pointY += 25 + (1.5 * checker.getRadius() * checkersInStack);
 			} else if (point == Constant.BLACK) {
 				pointX += 100;
 				pointY += 200;
@@ -266,7 +247,7 @@ public class GameController implements Initializable, Observer {
 		} else {
 			if (point == Constant.BLACKBAR) {
 				pointX += 35;
-				pointY += +205;
+				pointY += +205 - (1.5 * checker.getRadius() * checkersInStack);
 			} else if (point == Constant.RED) {
 				pointX += 100;
 				pointY += 25;
@@ -284,6 +265,34 @@ public class GameController implements Initializable, Observer {
 	public void moveChecker(Checker checker, int toPoint) {
 		Circle c = circleMap.get(checker);
 		placeOnStack(c, toPoint);
+	}
+	
+	@FXML
+	public void rollDice(){
+		game.roll();
+	}
+
+	@Override
+	public void drawDice(ArrayList<Die> dice) {
+		for(ImageView i : guiDice){
+			i.setImage(null);
+		}
+		for (int i = 0; i < dice.size(); i++) {
+			int dots = dice.get(i).getValue();
+			guiDice[i].setImage(setDie(dots));
+		}
+	}
+
+	public Image setDie(int dots) {
+		String fileName = String.format("%d.png", dots);
+		Image die = new Image(ClassLoader.getSystemResourceAsStream(fileName));
+		return die;
+	}
+
+	@Override
+	public void updatePlayer(int player) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
