@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
@@ -279,5 +280,7 @@
       <ImageView fx:id="die1" fitHeight="60.0" fitWidth="60.0" layoutX="457.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die3" fitHeight="60.0" fitWidth="60.0" layoutX="592.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die2" fitHeight="60.0" fitWidth="60.0" layoutX="525.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
+      <Text fill="#ff2b00" layoutX="691.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER RED" underline="true" wrappingWidth="87.939453125" />
+      <Text layoutX="696.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER BLACK" underline="true" />
    </children>
 </AnchorPane>

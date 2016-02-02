@@ -48,6 +48,10 @@ public class SharedMoveTests {
 
 	public static boolean direction(int fromPoint, int toPoint, int stateColor) {
 		int steps = toPoint - fromPoint;
+		if(fromPoint == Constant.REDBAR){
+			steps = toPoint;
+		}
+		
 		if (stateColor == Constant.RED && steps > 0 || stateColor == Constant.BLACK && steps < 0) {
 			return true;
 		} else
