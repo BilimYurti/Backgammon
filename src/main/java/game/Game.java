@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import com.sun.glass.ui.TouchInputSupport;
 
@@ -42,7 +43,7 @@ public class Game implements GameSubject{
 		if(!SharedMoveTests.direction(fromPos, toPos, board.getState().getColor())){
 			return false;
 		}
-		System.out.println(fromPos+" "+toPos);
+		System.out.println("\n"+fromPos+" "+toPos);
 		int steps = fromPos - toPos;
 		if(steps<0){
 			steps *= -1;
@@ -55,8 +56,29 @@ public class Game implements GameSubject{
 		}
 		for(Die d: dice){
 			if(d.getValue() == steps){
-				if(board.move(fromPos, d)){
+				if(board.move(fromPos, toPos)){
 					dice.remove(d);
+					notifyDiceStatus();
+					if(dice.isEmpty()){
+						board.nextPlayer();
+					}
+					return true;
+				}
+			}
+		}
+		
+		if(board.getState() == board.getBlackBearOffState() || board.getState() == board.getRedBearOffState()){
+			dice.sort(new Comparator<Die>() {
+
+				@Override
+				public int compare(Die o1, Die o2) {
+					return o1.getValue()-o2.getValue();
+				}
+			});
+			
+			for(int i = 0; i<dice.size(); i++){
+				if(steps < dice.get(i).getValue() && board.move(fromPos, toPos)){
+					dice.remove(dice.get(i));
 					notifyDiceStatus();
 					if(dice.isEmpty()){
 						board.nextPlayer();
@@ -88,12 +110,6 @@ public class Game implements GameSubject{
 		for(Observer o: observers){
 			o.drawDice(dice);
 		}
-		
-	}
-
-	@Override
-	public void notifyPlayer() {
-		// TODO Auto-generated method stub
 		
 	}
 

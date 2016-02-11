@@ -1,13 +1,13 @@
 package gui;
 
+import java.awt.MenuBar;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Stack;
-
-import com.sun.javafx.binding.StringFormatter;
 
 import game.Board;
 import game.Checker;
@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -34,6 +35,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameController implements Initializable, Observer {
@@ -41,39 +43,81 @@ public class GameController implements Initializable, Observer {
 	private Stage stage;
 	private AnchorPane ap;
 
-	@FXML Rectangle stack0;
-	@FXML Polygon stack1;
-	@FXML Polygon stack2;
-	@FXML Polygon stack3;
-	@FXML Polygon stack4;
-	@FXML Polygon stack5;
-	@FXML Polygon stack6;
-	@FXML Polygon stack7;
-	@FXML Polygon stack8;
-	@FXML Polygon stack9;
-	@FXML Polygon stack10;
-	@FXML Polygon stack11;
-	@FXML Polygon stack12;
-	@FXML Polygon stack13;
-	@FXML Polygon stack14;
-	@FXML Polygon stack15;
-	@FXML Polygon stack16;
-	@FXML Polygon stack17;
-	@FXML Polygon stack18;
-	@FXML Polygon stack19;
-	@FXML Polygon stack20;
-	@FXML Polygon stack21;
-	@FXML Polygon stack22;
-	@FXML Polygon stack23;
-	@FXML Polygon stack24;
-	@FXML Rectangle stack25;
-	@FXML Rectangle stack26;
-	@FXML Rectangle stack27;
-	@FXML ImageView die1;
-	@FXML ImageView die2;
-	@FXML ImageView die3;
-	@FXML ImageView die4;
-	@FXML ImageView background;
+	@FXML
+	Rectangle stack0;
+	@FXML
+	Polygon stack1;
+	@FXML
+	Polygon stack2;
+	@FXML
+	Polygon stack3;
+	@FXML
+	Polygon stack4;
+	@FXML
+	Polygon stack5;
+	@FXML
+	Polygon stack6;
+	@FXML
+	Polygon stack7;
+	@FXML
+	Polygon stack8;
+	@FXML
+	Polygon stack9;
+	@FXML
+	Polygon stack10;
+	@FXML
+	Polygon stack11;
+	@FXML
+	Polygon stack12;
+	@FXML
+	Polygon stack13;
+	@FXML
+	Polygon stack14;
+	@FXML
+	Polygon stack15;
+	@FXML
+	Polygon stack16;
+	@FXML
+	Polygon stack17;
+	@FXML
+	Polygon stack18;
+	@FXML
+	Polygon stack19;
+	@FXML
+	Polygon stack20;
+	@FXML
+	Polygon stack21;
+	@FXML
+	Polygon stack22;
+	@FXML
+	Polygon stack23;
+	@FXML
+	Polygon stack24;
+	@FXML
+	Rectangle stack25;
+	@FXML
+	Rectangle stack26;
+	@FXML
+	Rectangle stack27;
+	@FXML
+	ImageView die1;
+	@FXML
+	ImageView die2;
+	@FXML
+	ImageView die3;
+	@FXML
+	ImageView die4;
+	@FXML
+	ImageView background;
+
+	@FXML
+	Circle goRed;
+	@FXML
+	Circle goBlack;
+	@FXML
+	Text redBearOffCount;
+	@FXML
+	Text blackBearOffCount;
 	
 
 	Board board = Board.getInstance();
@@ -89,18 +133,21 @@ public class GameController implements Initializable, Observer {
 	Point2D dragAnchor;
 	private double initX;
 	private double initY;
+	private double stagex;
+	private double stagey;
 
 	public void init(Stage stage, Parent root) {
 		this.stage = stage;
 		ap = (AnchorPane) root;
-		
+		addDragListeners(ap, stage);
+
 		background.setImage(new Image(ClassLoader.getSystemResourceAsStream("wood.jpg")));
 
 		polygon = new Shape[] { stack0, stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8, stack9, stack10,
 				stack11, stack12, stack13, stack14, stack15, stack16, stack17, stack18, stack19, stack20, stack21,
 				stack22, stack23, stack24, stack25, stack26, stack27 };
-		
-		guiDice = new ImageView[] {die1, die2, die3, die4};
+
+		guiDice = new ImageView[] { die1, die2, die3, die4 };
 
 		pointMap = new HashMap<Integer, Shape>();
 		shapeIndexMap = new HashMap<Shape, Integer>();
@@ -117,8 +164,6 @@ public class GameController implements Initializable, Observer {
 		board.setState(board.getRedState());
 		game = new Game();
 		game.registerObserver(this);
-		rollDice();
-		
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -210,6 +255,10 @@ public class GameController implements Initializable, Observer {
 						int targetPos = shapeIndexMap.get(s);
 						placeOnStack(checker, targetPos);
 						acceptedMove = game.move(startPos, targetPos);
+						if (!points[startPos].empty() && !game.getDice().isEmpty()) {
+							Checker topChecker = (Checker) points[startPos].peek();
+							circleMap.get(topChecker).setDisable(false);
+						}
 						break;
 					}
 				}
@@ -218,8 +267,8 @@ public class GameController implements Initializable, Observer {
 					checker.setTranslateY(initY);
 				}
 				event.consume();
+				countBearOff();
 			}
-
 		});
 
 		ap.getChildren().add(checker);
@@ -227,11 +276,18 @@ public class GameController implements Initializable, Observer {
 	}
 
 	public void placeOnStack(Circle checker, int point) {
+		checker.setDisable(false);
+		checker.toFront();
 		Shape targetShape = pointMap.get(point);
 		double pointX = targetShape.getLayoutX();
 		double pointY = targetShape.getLayoutY();
 
 		int checkersInStack = points[point].size();
+
+		if (checkersInStack > 0) {
+			Checker topchecker = (Checker) points[point].peek();
+			circleMap.get(topchecker).setDisable(true);
+		}
 
 		boolean lowerBoard = point >= Constant.BLACK && point < 13 || point == Constant.REDBAR;
 
@@ -266,15 +322,31 @@ public class GameController implements Initializable, Observer {
 		Circle c = circleMap.get(checker);
 		placeOnStack(c, toPoint);
 	}
-	
+
 	@FXML
-	public void rollDice(){
+	public void rollDice() {
 		game.roll();
+	}
+
+	@FXML
+	public void exit() {
+		System.exit(0);
+	}
+
+	@FXML
+	public void newGame() {
+		for (Entry<Circle, Checker> entry : checkerMap.entrySet()) {
+			ap.getChildren().remove(entry.getKey());
+		}
+		checkerMap.clear();
+		circleMap.clear();
+		board.setUp();
+		board.nextPlayer();
 	}
 
 	@Override
 	public void drawDice(ArrayList<Die> dice) {
-		for(ImageView i : guiDice){
+		for (ImageView i : guiDice) {
 			i.setImage(null);
 		}
 		for (int i = 0; i < dice.size(); i++) {
@@ -291,8 +363,59 @@ public class GameController implements Initializable, Observer {
 
 	@Override
 	public void updatePlayer(int player) {
-		// TODO Auto-generated method stub
-		
+		if (player == Constant.RED) {
+			goRed.setVisible(true);
+			goBlack.setVisible(false);
+		} else {
+			goRed.setVisible(false);
+			goBlack.setVisible(true);
+		}
+
+		for (Entry<Checker, Circle> entry : circleMap.entrySet()) {
+			entry.getValue().setDisable(true);
+		}
+		if (board.getState() == board.getBlackBarstate() && !points[Constant.BLACKBAR].empty()) {
+			Checker c = (Checker) points[Constant.BLACKBAR].peek();
+			circleMap.get(c).setDisable(false);
+		} else if (board.getState() == board.getRedBarState() && !points[Constant.REDBAR].empty()) {
+			Checker c = (Checker) points[Constant.REDBAR].peek();
+			circleMap.get(c).setDisable(false);
+		} else {
+			for (int i = 0; i < points.length; i++) {
+				if (!points[i].empty()) {
+					Checker c = (Checker) points[i].peek();
+					if (c.color == player && c.getPosition() != Constant.BLACK && c.getPosition() != Constant.RED) {
+						circleMap.get(c).setDisable(false);
+					}
+				}
+			}
+		}
+	}
+
+	private void addDragListeners(final Node n, Stage primaryStage) {
+
+		n.setOnMousePressed((MouseEvent mouseEvent) -> {
+			stagex = n.getScene().getWindow().getX() - mouseEvent.getScreenX();
+			stagey = n.getScene().getWindow().getY() - mouseEvent.getScreenY();
+		});
+
+		n.setOnMouseDragged((MouseEvent mouseEvent) -> {
+			primaryStage.setX(mouseEvent.getScreenX() + stagex);
+			primaryStage.setY(mouseEvent.getScreenY() + stagey);
+		});
+	}
+	
+	private void countBearOff() {
+		if(board.getState() == board.getBlackBearOffState() && !points[Constant.BLACK].empty()){
+			String blackCount = String.format("%d", points[Constant.BLACK].size());
+			blackBearOffCount.setText(blackCount);
+			blackBearOffCount.toFront();
+		}
+		if(board.getState() == board.getRedBearOffState() && !points[Constant.RED].empty()){
+			String redCount = String.format("%d", points[Constant.RED].size());
+			redBearOffCount.setText(redCount);
+			redBearOffCount.toFront();
+		}
 	}
 
 }

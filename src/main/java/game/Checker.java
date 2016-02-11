@@ -10,6 +10,7 @@ public class Checker {
 	}
 	
 	public void setPosition(int pos){
+		System.out.println("Checker change position from "+getPosition()+" to "+pos);
 		position = pos;
 	}
 

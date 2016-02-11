@@ -107,6 +107,7 @@ public class Board implements BoardSubject{
 
 	public void setState(GameState state) {
 		System.out.println(state.toString());
+		notifyPlayer(state.getColor());
 		this.state = state;
 	}
 
@@ -157,14 +158,15 @@ public class Board implements BoardSubject{
 		// hit
 		case 0:
 			Checker hitChecker = points[toPoint].pop();
+			notifyMove(hitChecker, opponentBar());
 			points[opponentBar()].add(hitChecker);
 			hitChecker.setPosition(opponentBar());
-			notifyMove(hitChecker, opponentBar());
 			checker = points[fromPoint].pop();
 			checker.setPosition(toPoint);
 			notifyMove(checker, toPoint);
 			points[toPoint].add(checker);
 			outOfBar();
+			notifyPlayer(getState().getColor());
 			return true;
 		// valid move
 		case 1:
@@ -199,7 +201,9 @@ public class Board implements BoardSubject{
 		boolean bearOff = true;
 		if (state.getColor() == Constant.BLACK) {
 			for(Checker c: blackCheckers){
-				if(c.getPosition()>6){
+				if(     c.getPosition()!=Constant.BLACK && 
+						c.getPosition()!=Constant.BLACKBAR &&
+						c.getPosition()>6){
 					bearOff = false;
 				}
 			}
@@ -208,7 +212,9 @@ public class Board implements BoardSubject{
 			}
 		} else{
 			for(Checker c: redCheckers){
-				if(c.getPosition()<19){
+				if(		c.getPosition()!=Constant.RED && 
+						c.getPosition()!=Constant.REDBAR &&
+						c.getPosition()<19 ){
 					bearOff = false;
 				}
 			}
@@ -255,6 +261,7 @@ public class Board implements BoardSubject{
 				setState(redState);
 			}
 		}
+		notifyPlayer(getState().getColor());
 	}
 
 	public boolean areThereValidMoves(Die die) {
@@ -266,5 +273,13 @@ public class Board implements BoardSubject{
 		else{
 			return false;
 		}
+	}
+
+	@Override
+	public void notifyPlayer(int player) {
+		for(Observer o: observers){
+			o.updatePlayer(player);
+		}
+		
 	}
 }

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
@@ -16,6 +17,10 @@ public class Main extends Application {
 			GameController controller = (GameController) loader.getController();
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
+			primaryStage.sizeToScene();
+			primaryStage.initStyle(StageStyle.UNDECORATED);
+			primaryStage.setTitle("Backgammon");
 			primaryStage.show();
 			controller.init(primaryStage, root);
 		} catch(Exception e) {
