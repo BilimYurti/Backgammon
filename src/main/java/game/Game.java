@@ -35,10 +35,105 @@ public class Game implements GameSubject{
 				dice.add(new Die(dice.get(0)));
 			}
 			notifyDiceStatus();
+			checkPossibleMoves();
 		}
 		return false;
 	}
 	
+	public void removeDice(){
+		dice.clear();
+		notifyDiceStatus();
+	}
+	
+	private void notifyNoMoves() {
+		for(Observer o: observers){
+			o.notifyNoMoves();
+		}
+	}
+	
+	public void checkPossibleMoves(){
+		if(!possibleMoves()){
+			notifyNoMoves();
+			board.nextPlayer();
+		}
+	}
+
+	private boolean possibleMoves() {
+		if(board.getState() == board.getBlackBarstate()){
+			for(Die d:dice){
+				if(board.getState().testMove(Constant.BLACKBAR, 25-d.getValue()) != -1){
+					return true;
+				}
+			}
+		}else if(board.getState() == board.getRedBarState()){
+			for(Die d:dice){
+				if(board.getState().testMove(Constant.REDBAR, d.getValue()) != -1){
+					return true;
+				}
+			}
+		}else if(board.getState() == board.getBlackState()){
+			for(Checker c: board.getBlackCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()-d.getValue()) != -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getRedState()){
+			for(Checker c: board.getRedCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), d.getValue()+c.getPosition()) != -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getBlackBearOffState()){
+			for(Checker c: board.getBlackCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()-d.getValue())!= -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getRedBearOffState()){
+			for(Checker c: board.getRedCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()+d.getValue()) != -1){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void checkWinner(){
+		System.out.println("Checkwinner");
+		if(board.getState().getColor() == Constant.BLACK){
+			for(Checker c: board.getBlackCheckers()){
+				if(c.getPosition() != Constant.BLACK){
+					return;
+				}
+			}
+		}else if(board.getState().getColor() == Constant.RED){
+			for(Checker c: board.getRedCheckers()){
+				if(c.getPosition() != Constant.RED){
+					System.out.println(c.getPosition());
+					return;
+				}
+			}
+		}
+		notifyWinner();
+		
+	}
+	
+	private void notifyWinner() {
+		for(Observer o: observers){
+			o.notifyWinner(board.getState().getColor());
+		}
+		
+	}
+
 	public boolean move(int fromPos, int toPos){
 		if(!SharedMoveTests.direction(fromPos, toPos, board.getState().getColor())){
 			return false;
@@ -59,7 +154,10 @@ public class Game implements GameSubject{
 				if(board.move(fromPos, toPos)){
 					dice.remove(d);
 					notifyDiceStatus();
-					if(dice.isEmpty()){
+					checkWinner();
+					if(!dice.isEmpty()){
+						checkPossibleMoves();
+					}else{
 						board.nextPlayer();
 					}
 					return true;
@@ -67,7 +165,16 @@ public class Game implements GameSubject{
 			}
 		}
 		
-		if(board.getState() == board.getBlackBearOffState() || board.getState() == board.getRedBearOffState()){
+		boolean availableMovesInBearOff = false;
+		for(Die d: dice){
+			int toPoint = (board.getState().getColor() == Constant.BLACK)? fromPos -d.getValue() : fromPos+d.getValue();
+			if(SharedMoveTests.forcedMoves(toPoint, fromPos, board.getState().getColor())){
+				availableMovesInBearOff = true;
+			}
+		}
+		System.out.println(availableMovesInBearOff);
+		if((board.getState() == board.getBlackBearOffState() && !availableMovesInBearOff) || 
+				(board.getState() == board.getRedBearOffState() && !availableMovesInBearOff)){
 			dice.sort(new Comparator<Die>() {
 
 				@Override
@@ -75,12 +182,17 @@ public class Game implements GameSubject{
 					return o1.getValue()-o2.getValue();
 				}
 			});
-			
+			int outermostChecker = SharedMoveTests.positionOfOuterMostChecker(board.getState().getColor());
+			System.out.println(outermostChecker);
+			for(Checker c: board.getBlackCheckers())
 			for(int i = 0; i<dice.size(); i++){
-				if(steps < dice.get(i).getValue() && board.move(fromPos, toPos)){
+				if(steps < dice.get(i).getValue() && fromPos == outermostChecker && board.move(fromPos, toPos)){
 					dice.remove(dice.get(i));
 					notifyDiceStatus();
-					if(dice.isEmpty()){
+					checkWinner();
+					if(!dice.isEmpty()){
+						checkPossibleMoves();
+					}else{
 						board.nextPlayer();
 					}
 					return true;

@@ -129,7 +129,7 @@ public class Board implements BoardSubject{
 		for (Stack<Checker> s : points) {
 			s.clear();
 		}
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < redSetupPoints.length; i++) {
 			for (int j = 0; j < noOfRedCheckers[i]; j++) {
 				Checker r = new Checker(Constant.RED);
 				r.setPosition(redSetupPoints[i]);
@@ -139,7 +139,7 @@ public class Board implements BoardSubject{
 			}
 		}
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < blackSetupPoints.length; i++) {
 			for (int j = 0; j < noOfBlackCheckers[i]; j++) {
 				Checker b = new Checker(Constant.BLACK);
 				b.setPosition(blackSetupPoints[i]);
@@ -151,7 +151,6 @@ public class Board implements BoardSubject{
 	}
 
 	public boolean move(int fromPoint, int toPoint) {
-		detectBearOffState();
 		System.out.println("from:" +fromPoint+"  to:"+toPoint);
 		Checker checker;
 		switch (state.testMove(fromPoint, toPoint)) {
@@ -264,19 +263,20 @@ public class Board implements BoardSubject{
 				setState(redState);
 			}
 		}
+		detectBearOffState();
 		notifyPlayer(getState().getColor());
 	}
 
-	public boolean areThereValidMoves(Die die) {
-		if(state == getBlackBarstate() && state.testMove(Constant.BLACKBAR, 25-die.getValue())!=-1){
-			return true;
-		}if(state == getRedBarState() && state.testMove(Constant.REDBAR, die.getValue())!=-1){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+//	public boolean areThereValidMoves(Die die) {
+//		if(state == getBlackBarstate() && state.testMove(Constant.BLACKBAR, 25-die.getValue())!=-1){
+//			return true;
+//		}if(state == getRedBarState() && state.testMove(Constant.REDBAR, die.getValue())!=-1){
+//			return true;
+//		}
+//		else{
+//			return false;
+//		}
+//	}
 
 	@Override
 	public void notifyPlayer(int player) {

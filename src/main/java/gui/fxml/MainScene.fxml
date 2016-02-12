@@ -11,10 +11,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="799.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
    <children>
-      <ImageView fx:id="background" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
-      <MenuBar prefHeight="0.0" prefWidth="800.0">
+      <ImageView fx:id="background" fitHeight="593.0" fitWidth="799.0" layoutY="13.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/wood.jpg" />
+         </image></ImageView>
+      <MenuBar fx:id="menuBar" prefHeight="16.0" prefWidth="799.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -24,15 +27,23 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openWiki" text="Rules" />
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
          <effect>
-            <SepiaTone level="0.29" />
+            <Lighting>
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#bf8383" />
+               </light>
+            </Lighting>
          </effect>
       </MenuBar>
-      <Polygon fx:id="stack1" fill="WHITE" layoutX="646.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack1" fill="WHITE" layoutX="646.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
         <points>
           <Double fx:value="-50.0" />
           <Double fx:value="40.0" />
@@ -42,7 +53,7 @@
           <Double fx:value="-60.0" />
         </points>
       </Polygon>
-      <Polygon fx:id="stack2" fill="#572c2c" layoutX="596.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack2" fill="#572c2c" layoutX="596.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -52,7 +63,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack3" fill="WHITE" layoutX="546.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack3" fill="WHITE" layoutX="546.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -62,7 +73,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack4" fill="#572c2c" layoutX="496.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack4" fill="#572c2c" layoutX="496.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -72,7 +83,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack5" fill="WHITE" layoutX="446.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack5" fill="WHITE" layoutX="446.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -82,7 +93,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack6" fill="#572c2c" layoutX="396.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack6" fill="#572c2c" layoutX="396.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -92,7 +103,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack7" fill="WHITE" layoutX="275.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack7" fill="WHITE" layoutX="275.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -102,7 +113,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack8" fill="#572c2c" layoutX="225.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack8" fill="#572c2c" layoutX="225.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -112,7 +123,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack9" fill="WHITE" layoutX="175.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack9" fill="WHITE" layoutX="175.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -122,7 +133,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack10" fill="#572c2c" layoutX="125.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack10" fill="#572c2c" layoutX="125.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -132,7 +143,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack11" fill="WHITE" layoutX="75.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack11" fill="WHITE" layoutX="75.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -142,7 +153,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack12" fill="#572c2c" layoutX="25.0" layoutY="495.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack12" fill="#572c2c" layoutX="25.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -152,7 +163,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack13" fill="WHITE" layoutX="25.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack13" fill="WHITE" layoutX="25.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -162,7 +173,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack14" fill="#572c2c" layoutX="75.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack14" fill="#572c2c" layoutX="75.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -172,7 +183,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack15" fill="WHITE" layoutX="125.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack15" fill="WHITE" layoutX="125.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -182,7 +193,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack16" fill="#572c2c" layoutX="175.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack16" fill="#572c2c" layoutX="175.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -192,7 +203,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack17" fill="WHITE" layoutX="225.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack17" fill="WHITE" layoutX="225.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -202,7 +213,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack18" fill="#572c2c" layoutX="275.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack18" fill="#572c2c" layoutX="275.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -212,7 +223,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack19" fill="WHITE" layoutX="396.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack19" fill="WHITE" layoutX="396.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -222,7 +233,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack20" fill="#572c2c" layoutX="446.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack20" fill="#572c2c" layoutX="446.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -232,7 +243,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack21" fill="WHITE" layoutX="496.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack21" fill="WHITE" layoutX="496.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -242,7 +253,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack22" fill="#572c2c" layoutX="546.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack22" fill="#572c2c" layoutX="546.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -252,7 +263,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack23" fill="WHITE" layoutX="596.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack23" fill="WHITE" layoutX="596.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -262,7 +273,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack24" fill="#572c2c" layoutX="646.0" layoutY="149.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack24" fill="#572c2c" layoutX="646.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -272,33 +283,41 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="670.0" layoutY="370.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
-      <Rectangle fx:id="stack25" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="230.0" layoutX="670.0" layoutY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
-      <Rectangle fx:id="stack26" arcHeight="5.0" arcWidth="5.0" fill="#e5d27c00" height="230.0" layoutX="300.0" layoutY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
-      <Rectangle fx:id="stack27" arcHeight="5.0" arcWidth="5.0" fill="#a6a29500" height="230.0" layoutX="300.0" layoutY="370.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
-      <ImageView fx:id="die4" fitHeight="60.0" fitWidth="60.0" layoutX="391.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="die1" fitHeight="60.0" fitWidth="60.0" layoutX="457.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="die3" fitHeight="60.0" fitWidth="60.0" layoutX="592.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="die2" fitHeight="60.0" fitWidth="60.0" layoutX="525.0" layoutY="279.0" onMouseClicked="#rollDice" pickOnBounds="true" preserveRatio="true" />
-      <Text fill="#dd320f" layoutX="698.0" layoutY="252.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" underline="true" wrappingWidth="87.939453125">
+      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="670.0" layoutY="376.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
+      <Rectangle fx:id="stack25" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="230.0" layoutX="670.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
+      <Rectangle fx:id="stack26" arcHeight="5.0" arcWidth="5.0" fill="#e5d27c00" height="230.0" layoutX="300.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
+      <Rectangle fx:id="stack27" arcHeight="5.0" arcWidth="5.0" fill="#a6a29500" height="230.0" layoutX="300.0" layoutY="376.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
+      <ImageView fx:id="die4" fitHeight="60.0" fitWidth="60.0" layoutX="391.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="die1" fitHeight="60.0" fitWidth="60.0" layoutX="457.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="die3" fitHeight="60.0" fitWidth="60.0" layoutX="592.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="die2" fitHeight="60.0" fitWidth="60.0" layoutX="525.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fill="#dd320f" layoutX="698.0" layoutY="258.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" underline="true" wrappingWidth="87.939453125">
          <effect>
             <InnerShadow color="#b90f0f" />
          </effect>
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Text>
-      <Text layoutX="698.0" layoutY="378.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" underline="true">
+      <Text layoutX="698.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" underline="true">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Text>
-      <Button fx:id="btnRoll" layoutX="698.0" layoutY="297.0" mnemonicParsing="false" onAction="#rollDice" text="Roll dice" textOverrun="CLIP">
+      <Button fx:id="btnRoll" layoutX="698.0" layoutY="303.0" mnemonicParsing="false" onAction="#rollDice" text="Roll dice" textOverrun="CLIP">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <effect>
             <SepiaTone level="0.51" />
          </effect></Button>
-      <Circle fx:id="goRed" layoutX="679.0" layoutY="246.0" radius="8.0" strokeType="INSIDE" visible="false">
+      <Button fx:id="btnOK" disable="true" layoutX="698.0" layoutY="303.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="81.0" text="OK" textOverrun="CLIP" visible="false">
+         <effect>
+            <SepiaTone level="0.51" />
+         </effect>
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Circle fx:id="goRed" layoutX="679.0" layoutY="252.0" radius="8.0" strokeType="INSIDE" visible="false">
          <effect>
             <InnerShadow blurType="TWO_PASS_BOX" />
          </effect>
@@ -319,7 +338,7 @@
             </RadialGradient>
          </stroke>
       </Circle>
-      <Circle fx:id="goBlack" disable="true" layoutX="679.0" layoutY="372.0" radius="8.0" strokeType="INSIDE" visible="false">
+      <Circle fx:id="goBlack" disable="true" layoutX="679.0" layoutY="378.0" radius="8.0" strokeType="INSIDE" visible="false">
          <effect>
             <InnerShadow blurType="TWO_PASS_BOX" />
          </effect>
@@ -340,13 +359,18 @@
             </RadialGradient>
          </stroke>
       </Circle>
-      <Text fx:id="redBearOffCount" layoutX="766.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="redBorneOffCount" layoutX="747.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" textAlignment="CENTER" wrappingWidth="46.92626953125">
          <font>
-            <Font size="15.0" />
+            <Font name="Arial Black" size="18.0" />
          </font></Text>
-      <Text fx:id="blackBearOffCount" layoutX="765.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="blackBorneOffCount" layoutX="747.0" layoutY="549.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" textAlignment="CENTER" wrappingWidth="46.92626953125">
          <font>
-            <Font size="15.0" />
+            <Font name="Arial Black" size="18.0" />
          </font></Text>
+      <Text fx:id="informationText" fill="#0002ff" layoutX="1.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="298.89453125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

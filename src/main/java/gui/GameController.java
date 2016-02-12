@@ -1,6 +1,10 @@
 package gui;
 
+import java.awt.Desktop;
 import java.awt.MenuBar;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Stack;
+import java.util.Timer;
 
 import game.Board;
 import game.Checker;
@@ -15,6 +20,8 @@ import game.Constant;
 import game.Die;
 import game.Game;
 import game.Observer;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +29,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -109,15 +117,25 @@ public class GameController implements Initializable, Observer {
 	ImageView die4;
 	@FXML
 	ImageView background;
+	@FXML
+	javafx.scene.control.MenuBar menuBar;
+	
+	@FXML
+	Button btnRoll;
+	@FXML
+	Button btnOK;
 
 	@FXML
 	Circle goRed;
 	@FXML
 	Circle goBlack;
 	@FXML
-	Text redBearOffCount;
+	Text redBorneOffCount;
 	@FXML
-	Text blackBearOffCount;
+	Text blackBorneOffCount;
+	@FXML
+	Text informationText;
+
 	
 
 	Board board = Board.getInstance();
@@ -139,7 +157,7 @@ public class GameController implements Initializable, Observer {
 	public void init(Stage stage, Parent root) {
 		this.stage = stage;
 		ap = (AnchorPane) root;
-		addDragListeners(ap, stage);
+		addDragListeners(menuBar, stage);
 
 		background.setImage(new Image(ClassLoader.getSystemResourceAsStream("wood.jpg")));
 
@@ -160,8 +178,14 @@ public class GameController implements Initializable, Observer {
 		circleMap = new HashMap<>();
 
 		board.registerObserver(this);
-		board.setUp();
-		board.setState(board.getRedState());
+		
+		int[] redSetupPoints = {19,20,21,22,23,24};
+		int[] noOfRedCheckers = {0,0,0,0,0,2};
+		int[] blackSetupPoints = {1,2,3,4,5,6};
+		int[] noOfBlackCheckers = {2,2,2,3,3,3};
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		board.setState(board.getBlackState());
+		board.nextPlayer();
 		game = new Game();
 		game.registerObserver(this);
 	}
@@ -216,6 +240,7 @@ public class GameController implements Initializable, Observer {
 		checker.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
+				if(event.isPrimaryButtonDown() && !event.isSecondaryButtonDown()){
 				double dragX = event.getSceneX() - dragAnchor.getX();
 				double dragY = event.getSceneY() - dragAnchor.getY();
 
@@ -229,16 +254,16 @@ public class GameController implements Initializable, Observer {
 				if ((newYPosition >= checker.getRadius() + 25)
 						&& (newYPosition <= (ap.getHeight() - checker.getRadius()))) {
 					checker.setTranslateY(newYPosition);
-				}
+				}}
 				event.consume();
 			}
 		});
-
 		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
+				if(me.isPrimaryButtonDown()){
 				initX = checker.getTranslateX();
 				initY = checker.getTranslateY();
-				dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
+				dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());}
 				me.consume();
 			}
 		});
@@ -255,10 +280,7 @@ public class GameController implements Initializable, Observer {
 						int targetPos = shapeIndexMap.get(s);
 						placeOnStack(checker, targetPos);
 						acceptedMove = game.move(startPos, targetPos);
-						if (!points[startPos].empty() && !game.getDice().isEmpty()) {
-							Checker topChecker = (Checker) points[startPos].peek();
-							circleMap.get(topChecker).setDisable(false);
-						}
+						enableCheckers(board.getState().getColor());
 						break;
 					}
 				}
@@ -326,6 +348,7 @@ public class GameController implements Initializable, Observer {
 	@FXML
 	public void rollDice() {
 		game.roll();
+		btnRoll.setDisable(true);
 	}
 
 	@FXML
@@ -342,6 +365,10 @@ public class GameController implements Initializable, Observer {
 		circleMap.clear();
 		board.setUp();
 		board.nextPlayer();
+		redBorneOffCount.setText(null);
+		blackBorneOffCount.setText(null);
+		informationText.setText(null);
+		game.removeDice();
 	}
 
 	@Override
@@ -370,10 +397,11 @@ public class GameController implements Initializable, Observer {
 			goRed.setVisible(false);
 			goBlack.setVisible(true);
 		}
+		btnRoll.setDisable(false);
+	}
 
-		for (Entry<Checker, Circle> entry : circleMap.entrySet()) {
-			entry.getValue().setDisable(true);
-		}
+	private void enableCheckers(int player) {
+		disableAllCheckers();
 		if (board.getState() == board.getBlackBarstate() && !points[Constant.BLACKBAR].empty()) {
 			Checker c = (Checker) points[Constant.BLACKBAR].peek();
 			circleMap.get(c).setDisable(false);
@@ -392,30 +420,87 @@ public class GameController implements Initializable, Observer {
 		}
 	}
 
-	private void addDragListeners(final Node n, Stage primaryStage) {
+	private void disableAllCheckers() {
+		for (Entry<Checker, Circle> entry : circleMap.entrySet()) {
+			entry.getValue().setDisable(true);
+		}
+	}
 
-		n.setOnMousePressed((MouseEvent mouseEvent) -> {
-			stagex = n.getScene().getWindow().getX() - mouseEvent.getScreenX();
-			stagey = n.getScene().getWindow().getY() - mouseEvent.getScreenY();
+	private void addDragListeners(final Node node, Stage primaryStage) {
+
+		node.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				stagex = node.getScene().getWindow().getX() - event.getScreenX();
+				stagey = node.getScene().getWindow().getY() - event.getScreenY();
+			}
 		});
 
-		n.setOnMouseDragged((MouseEvent mouseEvent) -> {
-			primaryStage.setX(mouseEvent.getScreenX() + stagex);
-			primaryStage.setY(mouseEvent.getScreenY() + stagey);
+		node.setOnMouseDragged(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				primaryStage.setX(event.getScreenX() + stagex);
+				primaryStage.setY(event.getScreenY() + stagey);
+			}
 		});
 	}
 	
 	private void countBearOff() {
-		if(board.getState() == board.getBlackBearOffState() && !points[Constant.BLACK].empty()){
-			String blackCount = String.format("%d", points[Constant.BLACK].size());
-			blackBearOffCount.setText(blackCount);
-			blackBearOffCount.toFront();
+		if(board.getState() == board.getBlackBearOffState() || board.getState() == board.getRedBearOffState()){
+			String blackCount = points[Constant.BLACK].empty()? null : String.format("%d", points[Constant.BLACK].size());
+			blackBorneOffCount.setText(blackCount);
+			blackBorneOffCount.toFront();
+			String redCount = points[Constant.RED].empty()? null: String.format("%d", points[Constant.RED].size());
+			redBorneOffCount.setText(redCount);
+			redBorneOffCount.toFront();
+	 }
+	}
+	
+	@FXML
+	public void openWiki(){
+		if(Desktop.isDesktopSupported()){
+			try {
+				Desktop.getDesktop().browse(new URI("https://en.wikipedia.org/wiki/Backgammon"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
 		}
-		if(board.getState() == board.getRedBearOffState() && !points[Constant.RED].empty()){
-			String redCount = String.format("%d", points[Constant.RED].size());
-			redBearOffCount.setText(redCount);
-			redBearOffCount.toFront();
-		}
+	}
+
+	@Override
+	public void notifyNoMoves() {
+		informationText.setText("NO POSSIBLE MOVES!");
+		disableAllCheckers();
+		btnRoll.setVisible(false);
+		btnRoll.setDisable(true);
+		btnOK.setVisible(true);
+		btnOK.setDisable(false);
+		btnOK.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				game.removeDice();
+				btnOK.setVisible(false);
+				btnOK.setDisable(true);
+				btnRoll.setVisible(true);
+				btnRoll.setDisable(false);
+				informationText.setText(null);
+				enableCheckers(board.getState().getColor());
+			}
+		});
+	}
+
+	@Override
+	public void notifyWinner(int player) {
+		System.out.println("Winner Notified");
+		if(player == Constant.RED){
+			informationText.setText("RED WON THE ROUND");
+		}else
+			informationText.setText("BLACK WON THE ROUND");
 	}
 
 }

@@ -109,5 +109,24 @@ public class SharedMoveTests {
 		}
 		return toReturn;
 	}
-
+	
+	public static int positionOfOuterMostChecker(int stateColor){
+		int toReturn;
+		if(stateColor == Constant.RED){
+			toReturn = 25;
+			for(Checker c: board.getRedCheckers()){
+				if(c.getPosition()<toReturn){
+					toReturn = c.getPosition();
+				}
+			}
+		}else{
+			toReturn = 0;
+			for(Checker c: board.getBlackCheckers()){
+				if(c.getPosition()>toReturn){
+					toReturn = c.getPosition();
+				}
+			}
+		}
+		return toReturn;
+	}
 }

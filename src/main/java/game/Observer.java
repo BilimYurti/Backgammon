@@ -11,5 +11,9 @@ public interface Observer {
 	public void drawDice(ArrayList<Die> dice);
 	
 	public void updatePlayer(int player);
+
+	public void notifyNoMoves();
+	
+	public void notifyWinner(int player);
 	
 }
