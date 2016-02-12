@@ -116,16 +116,19 @@ public class Board implements BoardSubject{
 	}
 
 	public void setUp() {
+		int[] redSetupPoints = new int[] { 1, 12, 17, 19 };
+		int[] noOfRedCheckers = new int[] { 2, 5, 3, 5 };
+		int[] blackSetupPoints = new int[] { 6, 8, 13, 24 };
+		int[] noOfBlackCheckers = new int[] { 5, 3, 5, 2 };
+		createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+	}
+	
+	public void createAndPlaceCheckers(int[] redSetupPoints, int[] noOfRedCheckers, int[] blackSetupPoints, int[] noOfBlackCheckers){
 		redCheckers.clear();
 		blackCheckers.clear();
 		for (Stack<Checker> s : points) {
 			s.clear();
 		}
-		int[] redSetupPoints = new int[] { 1, 12, 17, 19 };
-		int[] noOfRedCheckers = new int[] { 2, 5, 3, 5 };
-		int[] blackSetupPoints = new int[] { 6, 8, 13, 24 };
-		int[] noOfBlackCheckers = new int[] { 5, 3, 5, 2 };
-
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < noOfRedCheckers[i]; j++) {
 				Checker r = new Checker(Constant.RED);
