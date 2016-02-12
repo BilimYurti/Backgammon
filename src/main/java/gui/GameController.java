@@ -179,11 +179,12 @@ public class GameController implements Initializable, Observer {
 
 		board.registerObserver(this);
 		
-		int[] redSetupPoints = {19,20,21,22,23,24};
-		int[] noOfRedCheckers = {0,0,0,0,0,2};
-		int[] blackSetupPoints = {1,2,3,4,5,6};
-		int[] noOfBlackCheckers = {2,2,2,3,3,3};
-		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+//		int[] redSetupPoints = {19,20,21,22,23,24};
+//		int[] noOfRedCheckers = {0,0,0,0,0,2};
+//		int[] blackSetupPoints = {1,2,3,4,5,6};
+//		int[] noOfBlackCheckers = {2,2,2,3,3,3};
+//		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		board.setUp();
 		board.setState(board.getBlackState());
 		board.nextPlayer();
 		game = new Game();
