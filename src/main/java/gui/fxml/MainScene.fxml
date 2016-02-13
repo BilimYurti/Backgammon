@@ -17,32 +17,6 @@
          <image>
             <Image url="@../images/wood.jpg" />
          </image></ImageView>
-      <MenuBar fx:id="menuBar" prefHeight="16.0" prefWidth="799.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#newGame" text="New Game" />
-              <MenuItem mnemonicParsing="false" onAction="#exit" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openWiki" text="Rules" />
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant color="#bf8383" />
-               </light>
-            </Lighting>
-         </effect>
-      </MenuBar>
       <Polygon fx:id="stack1" fill="WHITE" layoutX="646.0" layoutY="501.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
         <points>
           <Double fx:value="-50.0" />
@@ -163,7 +137,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack13" fill="WHITE" layoutX="25.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack13" fill="WHITE" layoutX="25.0" layoutY="155.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -173,7 +147,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack14" fill="#572c2c" layoutX="75.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack14" fill="#572c2c" layoutX="75.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -183,7 +157,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack15" fill="WHITE" layoutX="125.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack15" fill="WHITE" layoutX="125.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -193,7 +167,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack16" fill="#572c2c" layoutX="175.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack16" fill="#572c2c" layoutX="175.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -203,7 +177,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack17" fill="WHITE" layoutX="225.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack17" fill="WHITE" layoutX="225.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -213,7 +187,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack18" fill="#572c2c" layoutX="275.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack18" fill="#572c2c" layoutX="275.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -223,7 +197,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack19" fill="WHITE" layoutX="396.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack19" fill="WHITE" layoutX="396.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -233,7 +207,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack20" fill="#572c2c" layoutX="446.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack20" fill="#572c2c" layoutX="446.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -243,7 +217,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack21" fill="WHITE" layoutX="496.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack21" fill="WHITE" layoutX="496.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -253,7 +227,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack22" fill="#572c2c" layoutX="546.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack22" fill="#572c2c" layoutX="546.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -263,7 +237,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack23" fill="WHITE" layoutX="596.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack23" fill="WHITE" layoutX="596.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -273,7 +247,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Polygon fx:id="stack24" fill="#572c2c" layoutX="646.0" layoutY="150.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Polygon fx:id="stack24" fill="#572c2c" layoutX="646.0" layoutY="154.0" rotate="180.0" scaleX="0.5" scaleY="2.3" stroke="TRANSPARENT" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
@@ -283,10 +257,36 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="670.0" layoutY="376.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
+      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="670.0" layoutY="381.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
       <Rectangle fx:id="stack25" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="230.0" layoutX="670.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
       <Rectangle fx:id="stack26" arcHeight="5.0" arcWidth="5.0" fill="#e5d27c00" height="230.0" layoutX="300.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
       <Rectangle fx:id="stack27" arcHeight="5.0" arcWidth="5.0" fill="#a6a29500" height="230.0" layoutX="300.0" layoutY="376.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
+      <MenuBar fx:id="menuBar" prefHeight="16.0" prefWidth="799.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#newGame" text="New Game" />
+              <MenuItem mnemonicParsing="false" onAction="#exit" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openWiki" text="Rules" />
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+         <effect>
+            <Lighting>
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#bf8383" />
+               </light>
+            </Lighting>
+         </effect>
+      </MenuBar>
       <ImageView fx:id="die4" fitHeight="60.0" fitWidth="60.0" layoutX="391.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die1" fitHeight="60.0" fitWidth="60.0" layoutX="457.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die3" fitHeight="60.0" fitWidth="60.0" layoutX="592.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
