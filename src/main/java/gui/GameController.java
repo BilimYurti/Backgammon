@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Desktop;
-import java.awt.MenuBar;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Stack;
-import java.util.Timer;
 
 import game.Board;
 import game.Checker;
@@ -21,7 +19,6 @@ import game.Die;
 import game.Game;
 import game.Observer;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
