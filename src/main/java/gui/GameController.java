@@ -30,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -184,6 +185,7 @@ public class GameController implements Initializable, Observer {
 		board.setUp();
 		board.setState(board.getBlackState());
 		board.nextPlayer();
+		enableCheckers(board.getState().getColor());
 		game = new Game();
 		game.registerObserver(this);
 	}
@@ -217,7 +219,18 @@ public class GameController implements Initializable, Observer {
 				new Stop[] { new Stop(0, Color.rgb(250, 250, 255)), new Stop(1, checkerColor) }));
 
 		checker.setCursor(Cursor.CLOSED_HAND);
+		
+		checker.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
 
+			@Override
+			public void handle(MouseEvent event) {
+				if(event.getButton() != MouseButton.PRIMARY){
+					event.consume();
+				}
+				
+			}
+		});
+		
 		checker.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
@@ -257,37 +270,42 @@ public class GameController implements Initializable, Observer {
 			}
 		});
 		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent me) {
-				if(me.isPrimaryButtonDown()){
+			public void handle(MouseEvent event) {
+				if(event.getButton() == MouseButton.PRIMARY){
 				initX = checker.getTranslateX();
 				initY = checker.getTranslateY();
-				dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());}
-				me.consume();
+				dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
+				event.consume();
+				}else
+					event.consume();
 			}
 		});
 
 		checker.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
-				Boolean insideShape;
-				Boolean acceptedMove = false;
-				for (Shape s : polygon) {
-					insideShape = s.getBoundsInParent().contains(new Point2D(event.getSceneX(), event.getSceneY()));
-					if (insideShape) {
-						int startPos = checkerMap.get(checker).getPosition();
-						int targetPos = shapeIndexMap.get(s);
-						placeOnStack(checker, targetPos);
-						acceptedMove = game.move(startPos, targetPos);
-						enableCheckers(board.getState().getColor());
-						break;
+				if (event.getButton() == MouseButton.PRIMARY) {
+					Boolean insideShape;
+					Boolean acceptedMove = false;
+					for (Shape s : polygon) {
+						insideShape = s.getBoundsInParent().contains(new Point2D(event.getSceneX(), event.getSceneY()));
+						if (insideShape) {
+							int startPos = checkerMap.get(checker).getPosition();
+							int targetPos = shapeIndexMap.get(s);
+							placeOnStack(checker, targetPos);
+							acceptedMove = game.move(startPos, targetPos);
+							enableCheckers(board.getState().getColor());
+							break;
+						}
 					}
-				}
-				if (!acceptedMove) {
-					checker.setTranslateX(initX);
-					checker.setTranslateY(initY);
-				}
-				event.consume();
-				countBearOff();
+					if (!acceptedMove) {
+						checker.setTranslateX(initX);
+						checker.setTranslateY(initY);
+					}
+					event.consume();
+					countBearOff();
+				}else
+					event.consume();
 			}
 		});
 
