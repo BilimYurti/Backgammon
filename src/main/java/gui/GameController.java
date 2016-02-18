@@ -318,7 +318,7 @@ public class GameController implements Initializable, Observer {
 		checker.toFront();
 		Shape targetShape = pointMap.get(point);
 		double pointX = targetShape.getLayoutX();
-		double pointY = targetShape.getLayoutY();
+		double pointY = targetShape.getLayoutY()+3;
 
 		int checkersInStack = points[point].size();
 
@@ -389,6 +389,9 @@ public class GameController implements Initializable, Observer {
 
 	@Override
 	public void drawDice(ArrayList<Die> dice) {
+		if(dice.isEmpty()){
+			btnRoll.setDisable(false);
+		}
 		for (ImageView i : guiDice) {
 			i.setImage(null);
 		}
@@ -413,7 +416,6 @@ public class GameController implements Initializable, Observer {
 			goRed.setVisible(false);
 			goBlack.setVisible(true);
 		}
-		btnRoll.setDisable(false);
 	}
 
 	private void enableCheckers(int player) {
