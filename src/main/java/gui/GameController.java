@@ -251,7 +251,9 @@ public class GameController implements Initializable, Observer {
 		checker.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
-				if(event.isPrimaryButtonDown() && !event.isSecondaryButtonDown()){
+				if(event.getButton() != MouseButton.PRIMARY){
+					event.consume();
+				}else{
 				double dragX = event.getSceneX() - dragAnchor.getX();
 				double dragY = event.getSceneY() - dragAnchor.getY();
 
@@ -265,8 +267,8 @@ public class GameController implements Initializable, Observer {
 				if ((newYPosition >= checker.getRadius() + 25)
 						&& (newYPosition <= (ap.getHeight() - checker.getRadius()))) {
 					checker.setTranslateY(newYPosition);
-				}}
-				event.consume();
+				}
+				event.consume();}
 			}
 		});
 		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
