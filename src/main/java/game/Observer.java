@@ -16,4 +16,6 @@ public interface Observer {
 	
 	public void notifyWinner(int player);
 	
+	public void countBearOff();
+	
 }

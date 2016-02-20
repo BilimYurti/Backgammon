@@ -29,26 +29,22 @@ public class Board implements BoardSubject{
 	private List<Checker> redCheckers = new ArrayList<Checker>();
 	private List<Checker> blackCheckers = new ArrayList<Checker>();
 	
-	private ArrayList<Observer> observers = new ArrayList<>();
+	private ArrayList<Observer> observers = new ArrayList<Observer>();
 
-	@Override
 	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
 
-	@Override
 	public void removeObserver(Observer o) {
 		observers.remove(o);
 	}
 
-	@Override
 	public void notifyNewChecker(Checker checker){
 		for(Observer o: observers){
 			o.drawChecker(checker, checker.color);
 		}
 	}
 
-	@Override
 	public void notifyMove(Checker checker,int toPoint) {
 		for(Observer o: observers){
 			o.moveChecker(checker, toPoint);
@@ -169,6 +165,7 @@ public class Board implements BoardSubject{
 			points[toPoint].add(checker);
 			outOfBar();
 			notifyPlayer(getState().getColor());
+			detectBearOffState();
 			return true;
 		// valid move
 		case 1:
@@ -176,6 +173,7 @@ public class Board implements BoardSubject{
 			points[toPoint].add(checker);
 			checker.setPosition(toPoint);
 			outOfBar();
+			detectBearOffState();
 			return true;
 		// Bear-off move exeeding bounds	
 		case 2:
@@ -183,6 +181,7 @@ public class Board implements BoardSubject{
 			points[state.getColor()].add(checker);
 			checker.setPosition(toPoint);
 			notifyMove(checker, toPoint);
+			detectBearOffState();
 			return true;
 		default:
 			return false;
@@ -203,9 +202,7 @@ public class Board implements BoardSubject{
 		boolean bearOff = true;
 		if (state.getColor() == Constant.BLACK) {
 			for(Checker c: blackCheckers){
-				if(     c.getPosition()!=Constant.BLACK && 
-						c.getPosition()!=Constant.BLACKBAR &&
-						c.getPosition()>6){
+				if(c.getPosition()==Constant.BLACKBAR || c.getPosition()>6){
 					bearOff = false;
 				}
 			}
@@ -214,9 +211,7 @@ public class Board implements BoardSubject{
 			}
 		} else{
 			for(Checker c: redCheckers){
-				if(		c.getPosition()!=Constant.RED && 
-						c.getPosition()!=Constant.REDBAR &&
-						c.getPosition()<19 ){
+				if(c.getPosition()<19 || c.getPosition()> Constant.RED ){
 					bearOff = false;
 				}
 			}
@@ -278,7 +273,6 @@ public class Board implements BoardSubject{
 //		}
 //	}
 
-	@Override
 	public void notifyPlayer(int player) {
 		for(Observer o: observers){
 			o.updatePlayer(player);

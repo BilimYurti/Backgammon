@@ -9,8 +9,8 @@ import states.SharedMoveTests;
 
 public class Game implements GameSubject{
 	
-	private ArrayList<Observer> observers = new ArrayList<>();
-	private ArrayList<Die> dice = new ArrayList<>();
+	private ArrayList<Observer> observers = new ArrayList<Observer>();
+	private ArrayList<Die> dice = new ArrayList<Die>();
 	private int player = Constant.BLACK;
 	private boolean rolled = false;
 	private Board board = Board.getInstance();
@@ -177,7 +177,6 @@ public class Game implements GameSubject{
 				(board.getState() == board.getRedBearOffState() && !availableMovesInBearOff)){
 			dice.sort(new Comparator<Die>() {
 
-				@Override
 				public int compare(Die o1, Die o2) {
 					return o1.getValue()-o2.getValue();
 				}
@@ -202,17 +201,14 @@ public class Game implements GameSubject{
 		return false;
 	}
 
-	@Override
 	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
 
-	@Override
 	public void removeObserver(Observer o) {
 		observers.remove(0);
 	}
 
-	@Override
 	public void notifyDiceStatus() {
 		System.out.print("Dice: ");
 		for(Die d: dice){
@@ -221,6 +217,7 @@ public class Game implements GameSubject{
 		System.out.flush();
 		for(Observer o: observers){
 			o.drawDice(dice);
+			o.countBearOff();
 		}
 		
 	}

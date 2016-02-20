@@ -157,7 +157,7 @@ public class GameController implements Initializable, Observer {
 		ap = (AnchorPane) root;
 		addDragListeners(menuBar, stage);
 
-		background.setImage(new Image(ClassLoader.getSystemResourceAsStream("wood.jpg")));
+		background.setImage(new Image("gui/images/wood.jpg"));
 
 		polygon = new Shape[] { stack0, stack1, stack2, stack3, stack4, stack5, stack6, stack7, stack8, stack9, stack10,
 				stack11, stack12, stack13, stack14, stack15, stack16, stack17, stack18, stack19, stack20, stack21,
@@ -172,17 +172,17 @@ public class GameController implements Initializable, Observer {
 			pointMap.put(new Integer(i), polygon[i]);
 			shapeIndexMap.put(polygon[i], new Integer(i));
 		}
-		checkerMap = new HashMap<>();
-		circleMap = new HashMap<>();
+		checkerMap = new HashMap<Circle, Checker>();
+		circleMap = new HashMap<Checker, Circle>();
 
 		board.registerObserver(this);
 		
-//		int[] redSetupPoints = {19,20,21,22,23,24};
-//		int[] noOfRedCheckers = {0,0,0,0,0,2};
-//		int[] blackSetupPoints = {1,2,3,4,5,6};
-//		int[] noOfBlackCheckers = {2,2,2,3,3,3};
-//		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
-		board.setUp();
+		int[] redSetupPoints = {19,20,21,22,23,24,Constant.REDBAR};
+		int[] noOfRedCheckers = {0,0,0,0,0,2,1};
+		int[] blackSetupPoints = {1,2,3,4,5,6};
+		int[] noOfBlackCheckers = {2,2,2,3,3,3};
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+//		board.setUp();
 		board.setState(board.getBlackState());
 		board.nextPlayer();
 		enableCheckers(board.getState().getColor());
@@ -194,7 +194,6 @@ public class GameController implements Initializable, Observer {
 
 	}
 
-	@Override
 	public void drawChecker(Checker checker, int color) {
 		Circle c = createChecker(color);
 		checkerMap.put(c, checker);
@@ -222,7 +221,6 @@ public class GameController implements Initializable, Observer {
 		
 		checker.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
 
-			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton() != MouseButton.PRIMARY){
 					event.consume();
@@ -357,7 +355,6 @@ public class GameController implements Initializable, Observer {
 
 	}
 
-	@Override
 	public void moveChecker(Checker checker, int toPoint) {
 		Circle c = circleMap.get(checker);
 		placeOnStack(c, toPoint);
@@ -389,7 +386,6 @@ public class GameController implements Initializable, Observer {
 		game.removeDice();
 	}
 
-	@Override
 	public void drawDice(ArrayList<Die> dice) {
 		if(dice.isEmpty()){
 			btnRoll.setDisable(false);
@@ -404,12 +400,11 @@ public class GameController implements Initializable, Observer {
 	}
 
 	public Image setDie(int dots) {
-		String fileName = String.format("%d.png", dots);
-		Image die = new Image(ClassLoader.getSystemResourceAsStream(fileName));
+		String fileName = String.format("gui/images/%d.png", dots);
+		Image die = new Image(fileName);
 		return die;
 	}
 
-	@Override
 	public void updatePlayer(int player) {
 		if (player == Constant.RED) {
 			goRed.setVisible(true);
@@ -446,11 +441,10 @@ public class GameController implements Initializable, Observer {
 		}
 	}
 
-	private void addDragListeners(final Node node, Stage primaryStage) {
+	private void addDragListeners(final Node node, final Stage primaryStage) {
 
 		node.setOnMousePressed(new EventHandler<MouseEvent>() {
 
-			@Override
 			public void handle(MouseEvent event) {
 				stagex = node.getScene().getWindow().getX() - event.getScreenX();
 				stagey = node.getScene().getWindow().getY() - event.getScreenY();
@@ -459,7 +453,6 @@ public class GameController implements Initializable, Observer {
 
 		node.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
-			@Override
 			public void handle(MouseEvent event) {
 				primaryStage.setX(event.getScreenX() + stagex);
 				primaryStage.setY(event.getScreenY() + stagey);
@@ -467,7 +460,7 @@ public class GameController implements Initializable, Observer {
 		});
 	}
 	
-	private void countBearOff() {
+	public void countBearOff() {
 		if(board.getState() == board.getBlackBearOffState() || board.getState() == board.getRedBearOffState()){
 			String blackCount = points[Constant.BLACK].empty()? null : String.format("%d", points[Constant.BLACK].size());
 			blackBorneOffCount.setText(blackCount);
@@ -491,7 +484,6 @@ public class GameController implements Initializable, Observer {
 		}
 	}
 
-	@Override
 	public void notifyNoMoves() {
 		informationText.setText("NO POSSIBLE MOVES!");
 		disableAllCheckers();
@@ -501,7 +493,6 @@ public class GameController implements Initializable, Observer {
 		btnOK.setDisable(false);
 		btnOK.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
 			public void handle(ActionEvent event) {
 				game.removeDice();
 				btnOK.setVisible(false);
@@ -514,8 +505,8 @@ public class GameController implements Initializable, Observer {
 		});
 	}
 
-	@Override
 	public void notifyWinner(int player) {
+		btnRoll.setDisable(true);
 		System.out.println("Winner Notified");
 		if(player == Constant.RED){
 			informationText.setText("RED WON THE ROUND");
