@@ -9,6 +9,10 @@ public class Die {
 	}
 
 	public Die() {}
+	
+	public Die(int value){
+		this.value = value;
+	}
 
 	public int getValue() {
 		return value;

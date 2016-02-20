@@ -92,7 +92,7 @@ public class Game implements GameSubject{
 					availableMovesInBearOff = true;
 				}
 			}
-			if (availableMovesInBearOff) {
+			if (!availableMovesInBearOff) {
 				dice.sort(new Comparator<Die>() {
 
 					public int compare(Die o1, Die o2) {

@@ -12,6 +12,7 @@ import game.Board;
 import game.Checker;
 import game.Constant;
 import game.Die;
+import game.Game;
 
 public class BoardTest {
 	Board board = Board.getInstance();
@@ -194,6 +195,21 @@ public class BoardTest {
 		board.move(17, 20);
 		board.move(23, 25);
 		assertEquals(board.getRedBearOffState(), board.getState());
+	}
+	
+	@Test
+	public void testMoveOuterChecker(){
+		int[] redSetupPoints = new int[] {22, 23, 24 };
+		int[] noOfRedCheckers = new int[] {5, 5, 5 };
+		int[] blackSetupPoints = new int[] { 5, 3, 2, 1, 0 };
+		int[] noOfBlackCheckers = new int[] { 3, 1, 3, 3, 5 };
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		
+		Game g = new Game();
+		board.setState(board.getBlackBearOffState());
+		g.getDice().add(new Die(6));
+		assertTrue(g.move(5, 0));
+	
 	}
 
 }
