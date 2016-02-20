@@ -1,7 +1,7 @@
 package states;
 
 import game.Constant;
-import static states.SharedMoveTests.*;
+import static states.MoveTestMethods.*;
 
 public class RedState implements GameState {
 

@@ -4,21 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import gui.GameController;
 import states.BlackBarState;
 import states.BlackBearOffState;
 import states.BlackState;
 import states.GameState;
 import states.RedBarState;
-import states.RedState;
 import states.RedBearOffState;
+import states.RedState;
 
 public class Board implements BoardSubject{
 	private static Board instance = new Board();
 	private Stack<Checker>[] points;
 	
-	private GameController gc = null;
-
 	private GameState redState = new RedState();
 	private GameState redBarState = new RedBarState();
 	private GameState redBearOffState = new RedBearOffState();
@@ -49,7 +46,6 @@ public class Board implements BoardSubject{
 		for(Observer o: observers){
 			o.moveChecker(checker, toPoint);
 		}
-		
 	}
 
 	public List<Checker> getRedCheckers() {
@@ -102,7 +98,7 @@ public class Board implements BoardSubject{
 	}
 
 	public void setState(GameState state) {
-		System.out.println(state.toString());
+//		System.out.println(state.toString());
 		notifyPlayer(state.getColor());
 		this.state = state;
 	}
@@ -147,7 +143,6 @@ public class Board implements BoardSubject{
 	}
 
 	public boolean move(int fromPoint, int toPoint) {
-		System.out.println("from:" +fromPoint+"  to:"+toPoint);
 		Checker checker;
 		switch (state.testMove(fromPoint, toPoint)) {
 		// invalid move
@@ -163,7 +158,7 @@ public class Board implements BoardSubject{
 			checker.setPosition(toPoint);
 			notifyMove(checker, toPoint);
 			points[toPoint].add(checker);
-			outOfBar();
+			offBar();
 			notifyPlayer(getState().getColor());
 			detectBearOffState();
 			return true;
@@ -172,7 +167,7 @@ public class Board implements BoardSubject{
 			checker = points[fromPoint].pop();
 			points[toPoint].add(checker);
 			checker.setPosition(toPoint);
-			outOfBar();
+			offBar();
 			detectBearOffState();
 			return true;
 		// Bear-off move exeeding bounds	
@@ -189,7 +184,7 @@ public class Board implements BoardSubject{
 
 	}
 
-	private void outOfBar() {
+	private void offBar() {
 		if(state == getBlackBarstate() && points[Constant.BLACKBAR].isEmpty()){
 			setState(getBlackState());
 		}else if(state == getRedBarState() && points[Constant.REDBAR].isEmpty()){
@@ -261,17 +256,6 @@ public class Board implements BoardSubject{
 		detectBearOffState();
 		notifyPlayer(getState().getColor());
 	}
-
-//	public boolean areThereValidMoves(Die die) {
-//		if(state == getBlackBarstate() && state.testMove(Constant.BLACKBAR, 25-die.getValue())!=-1){
-//			return true;
-//		}if(state == getRedBarState() && state.testMove(Constant.REDBAR, die.getValue())!=-1){
-//			return true;
-//		}
-//		else{
-//			return false;
-//		}
-//	}
 
 	public void notifyPlayer(int player) {
 		for(Observer o: observers){

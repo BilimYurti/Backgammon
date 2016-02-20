@@ -1,12 +1,14 @@
 package states;
 
+import java.util.List;
 import java.util.Stack;
 
 import game.Board;
 import game.Checker;
 import game.Constant;
+import game.Die;
 
-public class SharedMoveTests {
+public class MoveTestMethods {
 	private static Board board = Board.getInstance();
 	private static Stack<Checker>[] points = board.getPoint();
 
@@ -129,4 +131,55 @@ public class SharedMoveTests {
 		}
 		return toReturn;
 	}
+	
+	public static boolean possibleMoves(List<Die> dice) {
+		if(board.getState() == board.getBlackBarstate()){
+			for(Die d:dice){
+				if(board.getState().testMove(Constant.BLACKBAR, 25-d.getValue()) != -1){
+					return true;
+				}
+			}
+		}else if(board.getState() == board.getRedBarState()){
+			for(Die d:dice){
+				if(board.getState().testMove(Constant.REDBAR, d.getValue()) != -1){
+					return true;
+				}
+			}
+		}else if(board.getState() == board.getBlackState()){
+			for(Checker c: board.getBlackCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()-d.getValue()) != -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getRedState()){
+			for(Checker c: board.getRedCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), d.getValue()+c.getPosition()) != -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getBlackBearOffState()){
+			for(Checker c: board.getBlackCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()-d.getValue())!= -1){
+						return true;
+					}
+				}
+			}
+		}else if(board.getState() == board.getRedBearOffState()){
+			for(Checker c: board.getRedCheckers()){
+				for(Die d: dice){
+					if(board.getState().testMove(c.getPosition(), c.getPosition()+d.getValue()) != -1){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 }
+

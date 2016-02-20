@@ -49,96 +49,51 @@ public class GameController implements Initializable, Observer {
 	private Stage stage;
 	private AnchorPane ap;
 
-	@FXML
-	Rectangle stack0;
-	@FXML
-	Polygon stack1;
-	@FXML
-	Polygon stack2;
-	@FXML
-	Polygon stack3;
-	@FXML
-	Polygon stack4;
-	@FXML
-	Polygon stack5;
-	@FXML
-	Polygon stack6;
-	@FXML
-	Polygon stack7;
-	@FXML
-	Polygon stack8;
-	@FXML
-	Polygon stack9;
-	@FXML
-	Polygon stack10;
-	@FXML
-	Polygon stack11;
-	@FXML
-	Polygon stack12;
-	@FXML
-	Polygon stack13;
-	@FXML
-	Polygon stack14;
-	@FXML
-	Polygon stack15;
-	@FXML
-	Polygon stack16;
-	@FXML
-	Polygon stack17;
-	@FXML
-	Polygon stack18;
-	@FXML
-	Polygon stack19;
-	@FXML
-	Polygon stack20;
-	@FXML
-	Polygon stack21;
-	@FXML
-	Polygon stack22;
-	@FXML
-	Polygon stack23;
-	@FXML
-	Polygon stack24;
-	@FXML
-	Rectangle stack25;
-	@FXML
-	Rectangle stack26;
-	@FXML
-	Rectangle stack27;
-	@FXML
-	ImageView die1;
-	@FXML
-	ImageView die2;
-	@FXML
-	ImageView die3;
-	@FXML
-	ImageView die4;
-	@FXML
-	ImageView background;
-	@FXML
-	javafx.scene.control.MenuBar menuBar;
+	@FXML	Rectangle stack0;
+	@FXML	Polygon stack1;
+	@FXML	Polygon stack2;
+	@FXML	Polygon stack3;
+	@FXML	Polygon stack4;
+	@FXML	Polygon stack5;
+	@FXML	Polygon stack6;
+	@FXML	Polygon stack7;
+	@FXML	Polygon stack8;
+	@FXML	Polygon stack9;
+	@FXML	Polygon stack10;
+	@FXML	Polygon stack11;
+	@FXML	Polygon stack12;
+	@FXML	Polygon stack13;
+	@FXML	Polygon stack14;
+	@FXML	Polygon stack15;
+	@FXML	Polygon stack16;
+	@FXML	Polygon stack17;
+	@FXML	Polygon stack18;
+	@FXML	Polygon stack19;
+	@FXML	Polygon stack20;
+	@FXML	Polygon stack21;
+	@FXML	Polygon stack22;
+	@FXML	Polygon stack23;
+	@FXML	Polygon stack24;
+	@FXML	Rectangle stack25;
+	@FXML	Rectangle stack26;
+	@FXML	Rectangle stack27;
+	@FXML	ImageView die1;
+	@FXML	ImageView die2;
+	@FXML	ImageView die3;
+	@FXML	ImageView die4;
+	@FXML	ImageView background;
+	@FXML	javafx.scene.control.MenuBar menuBar;
+	@FXML	Button btnRoll;
+	@FXML	Button btnOK;
+	@FXML	Circle goRed;
+	@FXML	Circle goBlack;
+	@FXML	Text redBorneOffCount;
+	@FXML	Text blackBorneOffCount;
+	@FXML	Text informationText;
 	
-	@FXML
-	Button btnRoll;
-	@FXML
-	Button btnOK;
-
-	@FXML
-	Circle goRed;
-	@FXML
-	Circle goBlack;
-	@FXML
-	Text redBorneOffCount;
-	@FXML
-	Text blackBorneOffCount;
-	@FXML
-	Text informationText;
-
-	
-
 	Board board = Board.getInstance();
 	Game game;
-	Stack[] points = board.getPoint();
+	Stack<Checker>[] points = board.getPoint();
 	Shape[] polygon;
 	ImageView[] guiDice;
 	Map<Integer, Shape> pointMap;
@@ -177,12 +132,12 @@ public class GameController implements Initializable, Observer {
 
 		board.registerObserver(this);
 		
-		int[] redSetupPoints = {19,20,21,22,23,24,Constant.REDBAR};
-		int[] noOfRedCheckers = {0,0,0,0,0,2,1};
-		int[] blackSetupPoints = {1,2,3,4,5,6};
-		int[] noOfBlackCheckers = {2,2,2,3,3,3};
-		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
-//		board.setUp();
+//		int[] redSetupPoints = {19,20,21,22,23,24};
+//		int[] noOfRedCheckers = {0,0,0,0,0,2,};
+//		int[] blackSetupPoints = {1,2,3,4,5,6};
+//		int[] noOfBlackCheckers = {2,2,2,3,3,3};
+//		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		board.setUp();
 		board.setState(board.getBlackState());
 		board.nextPlayer();
 		enableCheckers(board.getState().getColor());
@@ -203,14 +158,9 @@ public class GameController implements Initializable, Observer {
 
 	public Circle createChecker(final int color) {
 
-		final Color checkerColor;
-		if (color == Constant.BLACK) {
-			checkerColor = Color.BLACK;
-		} else {
-			checkerColor = Color.RED;
-		}
-
+		final Color checkerColor = (color == Constant.BLACK) ? Color.BLACK : Color.RED;
 		final Circle checker = new Circle(20, checkerColor);
+
 		checker.setTranslateX(50);
 		checker.setTranslateY(50);
 
@@ -218,17 +168,7 @@ public class GameController implements Initializable, Observer {
 				new Stop[] { new Stop(0, Color.rgb(250, 250, 255)), new Stop(1, checkerColor) }));
 
 		checker.setCursor(Cursor.CLOSED_HAND);
-		
-		checker.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-
-			public void handle(MouseEvent event) {
-				if(event.getButton() != MouseButton.PRIMARY){
-					event.consume();
-				}
 				
-			}
-		});
-		
 		checker.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
@@ -246,10 +186,22 @@ public class GameController implements Initializable, Observer {
 
 		});
 
+		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				if(event.isPrimaryButtonDown() && !event.isSecondaryButtonDown()){
+					initX = checker.getTranslateX();
+					initY = checker.getTranslateY();
+					dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
+					event.consume();
+				}else
+					event.consume();
+			}
+		});
+		
 		checker.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent event) {
-				if(event.getButton() != MouseButton.PRIMARY){
+				if(event.getButton() != MouseButton.PRIMARY | event.isSecondaryButtonDown()){
 					event.consume();
 				}else{
 				double dragX = event.getSceneX() - dragAnchor.getX();
@@ -267,17 +219,6 @@ public class GameController implements Initializable, Observer {
 					checker.setTranslateY(newYPosition);
 				}
 				event.consume();}
-			}
-		});
-		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				if(event.getButton() == MouseButton.PRIMARY){
-				initX = checker.getTranslateX();
-				initY = checker.getTranslateY();
-				dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
-				event.consume();
-				}else
-					event.consume();
 			}
 		});
 
@@ -507,11 +448,8 @@ public class GameController implements Initializable, Observer {
 
 	public void notifyWinner(int player) {
 		btnRoll.setDisable(true);
-		System.out.println("Winner Notified");
-		if(player == Constant.RED){
-			informationText.setText("RED WON THE ROUND");
-		}else
-			informationText.setText("BLACK WON THE ROUND");
+		String winner = (player == Constant.RED) ? "RED WON THE ROUND" : "BLACK WON THE ROUND";
+		informationText.setText(winner);
 	}
 
 }

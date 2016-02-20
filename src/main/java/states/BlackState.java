@@ -1,9 +1,9 @@
 package states;
 
-import static states.SharedMoveTests.basicMoveTests;
-import static states.SharedMoveTests.emptyOrOwnPoint;
-import static states.SharedMoveTests.hit;
-import static states.SharedMoveTests.inBounds;
+import static states.MoveTestMethods.basicMoveTests;
+import static states.MoveTestMethods.emptyOrOwnPoint;
+import static states.MoveTestMethods.hit;
+import static states.MoveTestMethods.inBounds;
 
 import game.Constant;
 
