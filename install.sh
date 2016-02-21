@@ -18,7 +18,7 @@ echo "cd bin/" >> run.sh
 echo "java gui.Main" >> run.sh
 chmod a+x run.sh
 
-if [ -f ./jarMaker.sh]
+if [ -f ./jarMaker.sh ]
   then 
     rm -r jarMaker.sh
 fi
