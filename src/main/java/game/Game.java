@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import states.MoveTestMethods;
 
@@ -40,8 +41,10 @@ public class Game implements GameSubject{
 				dice.add(new Die(dice.get(0)));
 				dice.add(new Die(dice.get(0)));
 			}
+			rolled = true;
 			notifyDiceStatus();
 			checkPossibleMoves();
+			return true;
 		}
 		return false;
 	}
@@ -50,22 +53,16 @@ public class Game implements GameSubject{
 		if(!MoveTestMethods.possibleMoves(dice)){
 			notifyNoMoves();
 			board.nextPlayer();
+			rolled = false;
 		}
 	}
 
 	public boolean move(int fromPos, int toPos){
-		if(!MoveTestMethods.direction(fromPos, toPos, board.getState().getColor())){
-			return false;
-		}
-		int steps = fromPos - toPos;
-		if(steps<0){
-			steps *= -1;
-		}
-		else if(fromPos == Constant.REDBAR){
-			steps = toPos;
-		}
-		else if(fromPos == Constant.BLACKBAR){
-			steps = 25-toPos;
+		int steps;
+		if(fromPos == Constant.REDBAR || fromPos == Constant.BLACKBAR){
+			steps = (fromPos == Constant.REDBAR) ? toPos : 25-toPos;
+		}else{
+			steps = Math.abs(fromPos - toPos);
 		}
 		for(Die d: dice){
 			if(d.getValue() == steps){
@@ -77,6 +74,7 @@ public class Game implements GameSubject{
 						checkPossibleMoves();
 					}else{
 						board.nextPlayer();
+						rolled = false;
 					}
 					return true;
 				}
@@ -109,6 +107,7 @@ public class Game implements GameSubject{
 							checkPossibleMoves();
 						} else {
 							board.nextPlayer();
+							rolled = false;
 						}
 						return true;
 					}
@@ -123,21 +122,16 @@ public class Game implements GameSubject{
 		notifyDiceStatus();
 	}
 
-	private void checkWinner(){
-		if(board.getState().getColor() == Constant.BLACK){
-			for(Checker c: board.getBlackCheckers()){
-				if(c.getPosition() != Constant.BLACK){
-					return;
-				}
-			}
-		}else if(board.getState().getColor() == Constant.RED){
-			for(Checker c: board.getRedCheckers()){
-				if(c.getPosition() != Constant.RED){
-					return;
-				}
+	public boolean checkWinner(){
+		List<Checker> testList =  board.getState().getColor() == Constant.BLACK ? board.getBlackCheckers() : board.getRedCheckers();
+		int home = board.getState().getColor() == Constant.BLACK ? Constant.BLACK : Constant.RED;
+		for (Checker c : testList) {
+			if (c.getPosition() != home) {
+				return false;
 			}
 		}
 		notifyWinner();
+		return true;
 	}
 
 	public void notifyDiceStatus() {

@@ -26,7 +26,6 @@ public class RedBearOffState implements GameState {
 	}
 
 	public int getColor() {
-		// TODO Auto-generated method stub
 		return Constant.RED;
 	}
 	

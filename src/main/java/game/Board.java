@@ -98,7 +98,6 @@ public class Board implements BoardSubject{
 	}
 
 	public void setState(GameState state) {
-//		System.out.println(state.toString());
 		notifyPlayer(state.getColor());
 		this.state = state;
 	}
@@ -195,64 +194,44 @@ public class Board implements BoardSubject{
 
 	private void detectBearOffState() {
 		boolean bearOff = true;
-		if (state.getColor() == Constant.BLACK) {
-			for(Checker c: blackCheckers){
-				if(c.getPosition()==Constant.BLACKBAR || c.getPosition()>6){
-					bearOff = false;
-				}
+		List<Checker> testList = state.getColor() == Constant.BLACK ? blackCheckers : redCheckers;
+		int min = state.getColor() == Constant.BLACK ? 0 : 19;
+		int max = state.getColor() == Constant.BLACK ? 6 : 25;
+		for(Checker c: testList){
+			if(c.getPosition()<min || c.getPosition()>max){
+				bearOff = false;
 			}
-			if(bearOff){
-				setState(getBlackBearOffState());
-			}
-		} else{
-			for(Checker c: redCheckers){
-				if(c.getPosition()<19 || c.getPosition()> Constant.RED ){
-					bearOff = false;
-				}
-			}
-			if(bearOff){
-				setState(getRedBearOffState());
-			}
+		}
+		if(bearOff){
+			GameState st = state.getColor() == Constant.BLACK ? blackBearOffState : redBearOffState;
+			setState(st);
 		}
 	}
 
 	private int opponentBar() {
-		if (state.getColor() == Constant.BLACK) {
-			return Constant.REDBAR;
-		} else
-			return Constant.BLACKBAR;
+		return (state.getColor() == Constant.BLACK) ? Constant.REDBAR : Constant.BLACKBAR;
 	}
 
 	public boolean move(int fromPoint, Die die) {
 		int toPoint;
-		if(state == getBlackBarstate()){
-			return move(fromPoint, Constant.RED-die.getValue());
-		}
-		if(state == getRedBarState()){
-			return move(fromPoint, die.getValue());
-		}
-		if (state.getColor() == Constant.BLACK) {
-			toPoint = fromPoint - die.getValue();
+		if (state == getBlackBarstate() || state == getRedBarState()) {
+			return state == getBlackBarstate() ? move(fromPoint, Constant.RED - die.getValue())
+					: move(fromPoint, die.getValue());
 		} else {
-			toPoint = fromPoint + die.getValue();
+			toPoint = (state.getColor() == Constant.BLACK) ? (fromPoint - die.getValue())
+					: (fromPoint + die.getValue());
+			return move(fromPoint, toPoint);
 		}
-		return move(fromPoint, toPoint);
 	}
 
 	public void nextPlayer() {
+		GameState nextState;
 		if (state.getColor() == Constant.RED) {
-			if(!points[Constant.BLACKBAR].empty()){
-				setState(blackBarState);
-			}else{
-				setState(blackState);
-			}
+			nextState = (!points[Constant.BLACKBAR].empty()) ? blackBarState : blackState;
 		} else {
-			if(!points[Constant.REDBAR].empty()){
-				setState(redBarState);
-			}else{
-				setState(redState);
-			}
+			nextState = (!points[Constant.REDBAR].empty()) ? redBarState : redState;
 		}
+		setState(nextState);
 		detectBearOffState();
 		notifyPlayer(getState().getColor());
 	}

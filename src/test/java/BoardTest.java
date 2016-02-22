@@ -211,5 +211,43 @@ public class BoardTest {
 		assertTrue(g.move(5, 0));
 	
 	}
+	
+	@Test
+	public void testBlackWin(){
+		int[] redSetupPoints = new int[] {24};
+		int[] noOfRedCheckers = new int[] {2};
+		int[] blackSetupPoints = new int[] {1};
+		int[] noOfBlackCheckers = new int[] {2};
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		
+		Game g = new Game();
+		board.setState(board.getBlackBearOffState());
+		g.getDice().add(new Die(1));
+		g.getDice().add(new Die(1));
+		assertFalse(g.checkWinner());
+		g.move(1, 0);
+		g.move(1, 0);
+		board.setState(board.getBlackBearOffState());
+		assertTrue(g.checkWinner() && board.getState().getColor() == Constant.BLACK);
+	}
+	
+	@Test
+	public void testRedWin(){
+		int[] redSetupPoints = new int[] {24};
+		int[] noOfRedCheckers = new int[] {2};
+		int[] blackSetupPoints = new int[] {1};
+		int[] noOfBlackCheckers = new int[] {2};
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		
+		Game g = new Game();
+		board.setState(board.getRedBearOffState());
+		g.getDice().add(new Die(1));
+		g.getDice().add(new Die(1));
+		assertFalse(g.checkWinner());
+		g.move(24, 25);
+		g.move(24, 25);
+		board.setState(board.getRedBearOffState());
+		assertTrue(g.checkWinner() && board.getState().getColor() == Constant.RED);
+	}
 
 }

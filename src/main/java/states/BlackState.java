@@ -3,7 +3,6 @@ package states;
 import static states.MoveTestMethods.basicMoveTests;
 import static states.MoveTestMethods.emptyOrOwnPoint;
 import static states.MoveTestMethods.hit;
-import static states.MoveTestMethods.inBounds;
 
 import game.Constant;
 
