@@ -257,8 +257,8 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="670.0" layoutY="381.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
-      <Rectangle fx:id="stack25" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="230.0" layoutX="670.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
+      <Rectangle fx:id="stack0" arcHeight="5.0" arcWidth="5.0" fill="#572c2c00" height="230.0" layoutX="669.0" layoutY="381.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
+      <Rectangle fx:id="stack25" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="230.0" layoutX="669.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="130.0" />
       <Rectangle fx:id="stack26" arcHeight="5.0" arcWidth="5.0" fill="#e5d27c00" height="230.0" layoutX="300.0" layoutY="25.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
       <Rectangle fx:id="stack27" arcHeight="5.0" arcWidth="5.0" fill="#a6a29500" height="230.0" layoutX="300.0" layoutY="376.0" stroke="TRANSPARENT" strokeType="INSIDE" width="71.0" />
       <MenuBar fx:id="menuBar" prefHeight="16.0" prefWidth="799.0">
@@ -291,14 +291,14 @@
       <ImageView fx:id="die1" fitHeight="60.0" fitWidth="60.0" layoutX="457.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die3" fitHeight="60.0" fitWidth="60.0" layoutX="592.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="die2" fitHeight="60.0" fitWidth="60.0" layoutX="525.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" />
-      <Text fill="#dd320f" layoutX="698.0" layoutY="258.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" underline="true" wrappingWidth="87.939453125">
+      <Text fill="#dd320f" layoutX="698.0" layoutY="280.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" underline="true" wrappingWidth="87.939453125">
          <effect>
             <InnerShadow color="#b90f0f" />
          </effect>
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Text>
-      <Text layoutX="698.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" underline="true">
+      <Text layoutX="698.0" layoutY="361.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" underline="true">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Text>
@@ -317,7 +317,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Circle fx:id="goRed" layoutX="679.0" layoutY="252.0" radius="8.0" strokeType="INSIDE" visible="false">
+      <Circle fx:id="goRed" layoutX="679.0" layoutY="274.0" radius="8.0" strokeType="INSIDE" visible="false">
          <effect>
             <InnerShadow blurType="TWO_PASS_BOX" />
          </effect>
@@ -338,7 +338,7 @@
             </RadialGradient>
          </stroke>
       </Circle>
-      <Circle fx:id="goBlack" disable="true" layoutX="679.0" layoutY="378.0" radius="8.0" strokeType="INSIDE" visible="false">
+      <Circle fx:id="goBlack" disable="true" layoutX="679.0" layoutY="355.0" radius="8.0" strokeType="INSIDE" visible="false">
          <effect>
             <InnerShadow blurType="TWO_PASS_BOX" />
          </effect>

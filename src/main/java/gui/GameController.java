@@ -1,12 +1,19 @@
 package gui;
 
 import java.awt.Desktop;
+import java.awt.Paint;
+import java.awt.PaintContext;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -27,6 +34,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,6 +52,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import states.MoveTestMethods;
 
 public class GameController implements Initializable, Observer {
 
@@ -129,16 +139,11 @@ public class GameController implements Initializable, Observer {
 		}
 		checkerMap = new HashMap<Circle, Checker>();
 		circleMap = new HashMap<Checker, Circle>();
-
-		board.registerObserver(this);
 		
-//		int[] redSetupPoints = {19,20,21,22,23,24};
-//		int[] noOfRedCheckers = {0,0,0,0,0,2,};
-//		int[] blackSetupPoints = {1,2,3,4,5,6};
-//		int[] noOfBlackCheckers = {2,2,2,3,3,3};
-//		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		board.registerObserver(this);
 		board.setUp();
 		board.setState(board.getBlackState());
+		board.nextPlayer();
 		board.nextPlayer();
 		enableCheckers(board.getState().getColor());
 		game = new Game();
@@ -192,6 +197,7 @@ public class GameController implements Initializable, Observer {
 					initX = checker.getTranslateX();
 					initY = checker.getTranslateY();
 					dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
+					highLightValidPoints(checkerMap.get(checker));
 					event.consume();
 				}else
 					event.consume();
@@ -245,6 +251,7 @@ public class GameController implements Initializable, Observer {
 					}
 					event.consume();
 					countBearOff();
+					removeHighLight();
 				}else
 					event.consume();
 			}
@@ -252,6 +259,39 @@ public class GameController implements Initializable, Observer {
 
 		ap.getChildren().add(checker);
 		return checker;
+	}
+
+	private void highLightValidPoints(Checker checker) {
+		DropShadow ds = new DropShadow(10, new Color(0, 0, 0, 1));
+		ds.setSpread(0.7);
+		ds.setWidth(30);
+		ds.setHeight(0);
+		ds.setRadius(10);
+		ColorInput black = new ColorInput();
+		black.setHeight(226);
+		black.setWidth(130);
+		black.setPaint(Color.BLACK);
+		ColorInput red = new ColorInput();
+		red.setHeight(226);
+		red.setWidth(130);
+		
+		List<Integer> stacksToHighlight = MoveTestMethods.getValidMovesForChecker(checker, game.getDice());
+		for (Integer i : stacksToHighlight) {
+			if (i == Constant.BLACK) {
+				polygon[i].setEffect(black);
+				polygon[i].setOpacity(0.4);
+			} else if (i == Constant.RED) {
+				polygon[i].setEffect(red);
+				polygon[i].setOpacity(0.4);
+			} else
+				polygon[i].setEffect(ds);
+		}
+	}
+	
+	private void removeHighLight(){
+		for(Shape p : polygon){
+			p.setEffect(null);
+		}
 	}
 
 	public void placeOnStack(Circle checker, int point) {
@@ -324,6 +364,7 @@ public class GameController implements Initializable, Observer {
 		redBorneOffCount.setText(null);
 		blackBorneOffCount.setText(null);
 		informationText.setText(null);
+		enableCheckers(board.getState().getColor());
 		game.removeDice();
 	}
 

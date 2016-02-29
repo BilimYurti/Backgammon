@@ -3,6 +3,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Stack;
 
 import org.junit.Test;
@@ -13,6 +14,7 @@ import game.Checker;
 import game.Constant;
 import game.Die;
 import game.Game;
+import states.MoveTestMethods;
 
 public class BoardTest {
 	Board board = Board.getInstance();
@@ -210,6 +212,29 @@ public class BoardTest {
 		g.getDice().add(new Die(6));
 		assertTrue(g.move(5, 0));
 	
+	}
+	
+	@Test
+	public void testGetValidMovesForChecker(){
+		int[] redSetupPoints = new int[] {23, 24};
+		int[] noOfRedCheckers = new int[] {1, 1};
+		int[] blackSetupPoints = new int[] {2, 1};
+		int[] noOfBlackCheckers = new int[] {1, 1 };
+		board.createAndPlaceCheckers(redSetupPoints, noOfRedCheckers, blackSetupPoints, noOfBlackCheckers);
+		board.setState(board.getRedBearOffState());
+		
+		Game g = new Game();
+		g.getDice().add(new Die(6));
+		List<Integer> results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[24].peek(), g.getDice());
+		assertTrue(results.isEmpty());
+		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[23].peek(), g.getDice());
+		assertEquals(new Integer(25), results.get(0));
+		board.nextPlayer();
+		assertTrue(g.getDice().get(0).getValue() == 6);
+		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[1].peek(), g.getDice());
+		assertTrue(results.isEmpty());
+		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[2].peek(), g.getDice());
+		assertEquals(new Integer(0), results.get(0));
 	}
 	
 	@Test

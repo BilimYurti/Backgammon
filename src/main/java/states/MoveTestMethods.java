@@ -1,5 +1,6 @@
 package states;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -65,6 +66,18 @@ public class MoveTestMethods {
 						|| 
 						stateColor == Constant.BLACK && toPoint >= 0 && toPoint <= 5);
 		return test ? true : false;
+	}
+	
+	public static boolean availableMovesInBearOff(List<Die> dice, int fromPos){
+		boolean toReturn = false;
+		for (Die d : dice) {
+			int toPoint = (board.getState().getColor() == Constant.BLACK) ? fromPos - d.getValue()
+					: fromPos + d.getValue();
+			if (MoveTestMethods.forcedMoves(toPoint, fromPos, board.getState().getColor())) {
+				toReturn = true;
+			}
+		}
+		return toReturn;
 	}
 
 	public static boolean forcedMoves(int toPoint, int fromPoint, int stateColor) {
@@ -153,6 +166,31 @@ public class MoveTestMethods {
 			}
 		}
 		return false;
+	}
+	
+	public static List<Integer> getValidMovesForChecker(Checker c, List<Die> dice) {
+		List<Integer> toReturn = new ArrayList<Integer>();
+		GameState state = Board.getInstance().getState();
+		int toPoint;
+
+		for (Die d : dice) {
+			if (state == board.getBlackBarstate() || state == board.getRedBarState()) {
+				toPoint = (state.getColor() == Constant.BLACK) ? (Constant.RED - d.getValue()) : d.getValue();
+			}else{
+				toPoint = (state.getColor() == Constant.BLACK) ? (c.getPosition() - d.getValue())
+						: (c.getPosition() + d.getValue());
+			}
+			if (state.testMove(c.getPosition(), toPoint) != -1 && toPoint<=Constant.RED && toPoint>=Constant.BLACK) {
+				toReturn.add(new Integer(toPoint));
+			}else if((state == board.getBlackBearOffState() || state == board.getRedBearOffState()) 
+					&& !availableMovesInBearOff(dice, c.getPosition()) 
+					&& positionOfOuterMostChecker(state.getColor()) == c.getPosition()){
+				toPoint = state.getColor() == Constant.BLACK ? Constant.BLACK : Constant.RED;
+				toReturn.add(new Integer(toPoint));
+			}
+		}
+
+		return toReturn;
 	}
 
 }

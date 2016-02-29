@@ -120,6 +120,7 @@ public class Game implements GameSubject{
 	public void removeDice(){
 		dice.clear();
 		notifyDiceStatus();
+		rolled = false;
 	}
 
 	public boolean checkWinner(){
