@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import states.MoveTestMethods;
+import states.MoveValidationMethods;
 
 public class Game implements GameSubject{
 	
@@ -50,7 +50,7 @@ public class Game implements GameSubject{
 	}
 	
 	public void checkPossibleMoves(){
-		if(!MoveTestMethods.possibleMoves(dice)){
+		if(!MoveValidationMethods.possibleMoves(dice)){
 			notifyNoMoves();
 			board.nextPlayer();
 			rolled = false;
@@ -86,7 +86,7 @@ public class Game implements GameSubject{
 			for (Die d : dice) {
 				int toPoint = (board.getState().getColor() == Constant.BLACK) ? fromPos - d.getValue()
 						: fromPos + d.getValue();
-				if (MoveTestMethods.forcedMoves(toPoint, fromPos, board.getState().getColor())) {
+				if (MoveValidationMethods.forcedMoves(toPoint, fromPos, board.getState().getColor())) {
 					availableMovesInBearOff = true;
 				}
 			}
@@ -97,7 +97,7 @@ public class Game implements GameSubject{
 						return o1.getValue() - o2.getValue();
 					}
 				});
-				int outermostChecker = MoveTestMethods.positionOfOuterMostChecker(board.getState().getColor());
+				int outermostChecker = MoveValidationMethods.positionOfOuterMostChecker(board.getState().getColor());
 				for (int i = 0; i < dice.size(); i++) {
 					if (steps < dice.get(i).getValue() && fromPos == outermostChecker && board.move(fromPos, toPos)) {
 						dice.remove(dice.get(i));

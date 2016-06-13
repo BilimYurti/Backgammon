@@ -1,8 +1,8 @@
 package states;
 
-import static states.MoveTestMethods.basicMoveTests;
-import static states.MoveTestMethods.emptyOrOwnPoint;
-import static states.MoveTestMethods.hit;
+import static states.MoveValidationMethods.basicMoveTests;
+import static states.MoveValidationMethods.emptyOrOwnPoint;
+import static states.MoveValidationMethods.hit;
 
 import game.Constant;
 

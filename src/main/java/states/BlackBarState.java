@@ -1,6 +1,6 @@
 package states;
 
-import static states.MoveTestMethods.*;
+import static states.MoveValidationMethods.*;
 
 import game.Constant;
 

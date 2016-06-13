@@ -43,7 +43,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import states.MoveTestMethods;
+import states.MoveValidationMethods;
 
 public class GameController implements Observer {
 
@@ -261,7 +261,7 @@ public class GameController implements Observer {
 		red.setHeight(226);
 		red.setWidth(130);
 		
-		List<Integer> stacksToHighlight = MoveTestMethods.getValidMovesForChecker(checker, game.getDice());
+		List<Integer> stacksToHighlight = MoveValidationMethods.getValidMovesForChecker(checker, game.getDice());
 		for (Integer i : stacksToHighlight) {
 			if (i == Constant.BLACK) {
 				polygon[i].setEffect(black);

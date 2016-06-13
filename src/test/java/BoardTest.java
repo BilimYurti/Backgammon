@@ -14,7 +14,7 @@ import game.Checker;
 import game.Constant;
 import game.Die;
 import game.Game;
-import states.MoveTestMethods;
+import states.MoveValidationMethods;
 
 public class BoardTest {
 	Board board = Board.getInstance();
@@ -225,15 +225,15 @@ public class BoardTest {
 		
 		Game g = new Game();
 		g.getDice().add(new Die(6));
-		List<Integer> results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[24].peek(), g.getDice());
+		List<Integer> results = MoveValidationMethods.getValidMovesForChecker(board.getPoint()[24].peek(), g.getDice());
 		assertTrue(results.isEmpty());
-		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[23].peek(), g.getDice());
+		results = MoveValidationMethods.getValidMovesForChecker(board.getPoint()[23].peek(), g.getDice());
 		assertEquals(new Integer(25), results.get(0));
 		board.nextPlayer();
 		assertTrue(g.getDice().get(0).getValue() == 6);
-		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[1].peek(), g.getDice());
+		results = MoveValidationMethods.getValidMovesForChecker(board.getPoint()[1].peek(), g.getDice());
 		assertTrue(results.isEmpty());
-		results = MoveTestMethods.getValidMovesForChecker(board.getPoint()[2].peek(), g.getDice());
+		results = MoveValidationMethods.getValidMovesForChecker(board.getPoint()[2].peek(), g.getDice());
 		assertEquals(new Integer(0), results.get(0));
 	}
 	

@@ -1,7 +1,7 @@
 package states;
 
 import game.Constant;
-import static states.MoveTestMethods.*;
+import static states.MoveValidationMethods.*;
 
 public class BlackBearOffState implements GameState {
 

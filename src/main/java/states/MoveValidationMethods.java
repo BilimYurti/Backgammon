@@ -9,7 +9,7 @@ import game.Checker;
 import game.Constant;
 import game.Die;
 
-public class MoveTestMethods {
+public class MoveValidationMethods {
 	private static Board board = Board.getInstance();
 	private static Stack<Checker>[] points = board.getPoint();
 
@@ -73,7 +73,7 @@ public class MoveTestMethods {
 		for (Die d : dice) {
 			int toPoint = (board.getState().getColor() == Constant.BLACK) ? fromPos - d.getValue()
 					: fromPos + d.getValue();
-			if (MoveTestMethods.forcedMoves(toPoint, fromPos, board.getState().getColor())) {
+			if (MoveValidationMethods.forcedMoves(toPoint, fromPos, board.getState().getColor())) {
 				toReturn = true;
 			}
 		}
