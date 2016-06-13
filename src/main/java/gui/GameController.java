@@ -1,22 +1,14 @@
 package gui;
 
 import java.awt.Desktop;
-import java.awt.Paint;
-import java.awt.PaintContext;
-import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 import java.util.Stack;
 
 import game.Board;
@@ -28,7 +20,6 @@ import game.Observer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -54,9 +45,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import states.MoveTestMethods;
 
-public class GameController implements Initializable, Observer {
+public class GameController implements Observer {
 
-	private Stage stage;
 	private AnchorPane ap;
 
 	@FXML	Rectangle stack0;
@@ -118,7 +108,6 @@ public class GameController implements Initializable, Observer {
 	private double stagey;
 
 	public void init(Stage stage, Parent root) {
-		this.stage = stage;
 		ap = (AnchorPane) root;
 		addDragListeners(menuBar, stage);
 
@@ -148,10 +137,6 @@ public class GameController implements Initializable, Observer {
 		enableCheckers(board.getState().getColor());
 		game = new Game();
 		game.registerObserver(this);
-	}
-
-	public void initialize(URL location, ResourceBundle resources) {
-
 	}
 
 	public void drawChecker(Checker checker, int color) {
@@ -192,12 +177,13 @@ public class GameController implements Initializable, Observer {
 		});
 
 		checker.setOnMousePressed(new EventHandler<MouseEvent>() {
+			
 			public void handle(MouseEvent event) {
 				if(event.isPrimaryButtonDown() && !event.isSecondaryButtonDown()){
 					initX = checker.getTranslateX();
 					initY = checker.getTranslateY();
 					dragAnchor = new Point2D(event.getSceneX(), event.getSceneY());
-					highLightValidPoints(checkerMap.get(checker));
+					highlightValidPoints(checkerMap.get(checker));
 					event.consume();
 				}else
 					event.consume();
@@ -251,7 +237,7 @@ public class GameController implements Initializable, Observer {
 					}
 					event.consume();
 					countBearOff();
-					removeHighLight();
+					removeHighlight();
 				}else
 					event.consume();
 			}
@@ -261,7 +247,7 @@ public class GameController implements Initializable, Observer {
 		return checker;
 	}
 
-	private void highLightValidPoints(Checker checker) {
+	private void highlightValidPoints(Checker checker) {
 		DropShadow ds = new DropShadow(10, new Color(0, 0, 0, 1));
 		ds.setSpread(0.7);
 		ds.setWidth(30);
@@ -288,7 +274,7 @@ public class GameController implements Initializable, Observer {
 		}
 	}
 	
-	private void removeHighLight(){
+	private void removeHighlight(){
 		for(Shape p : polygon){
 			p.setEffect(null);
 		}
@@ -456,13 +442,17 @@ public class GameController implements Initializable, Observer {
 	@FXML
 	public void openWiki(){
 		if(Desktop.isDesktopSupported()){
-			try {
-				Desktop.getDesktop().browse(new URI("https://en.wikipedia.org/wiki/Backgammon"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						Desktop.getDesktop().browse(new URI("https://en.wikipedia.org/wiki/Backgammon"));
+					} catch (IOException | URISyntaxException e) {
+						e.printStackTrace();
+					}	
+				}
+			}).start();
 		}
 	}
 

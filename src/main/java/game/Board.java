@@ -86,6 +86,7 @@ public class Board implements BoardSubject{
 		return instance;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Board() {
 		points = new Stack[28];
 		for (int i = 0; i < points.length; i++) {
@@ -180,7 +181,6 @@ public class Board implements BoardSubject{
 		default:
 			return false;
 		}
-
 	}
 
 	private void offBar() {
@@ -240,6 +240,5 @@ public class Board implements BoardSubject{
 		for(Observer o: observers){
 			o.updatePlayer(player);
 		}
-		
 	}
 }
