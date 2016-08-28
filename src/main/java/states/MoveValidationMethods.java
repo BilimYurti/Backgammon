@@ -50,10 +50,11 @@ public class MoveValidationMethods {
 	public static boolean checkerFromBar(int fromPoint, int toPoint, int stateColor) {
 		return (stateColor == Constant.RED && 
 				fromPoint == Constant.REDBAR && 
-				toPoint <= 6 && toPoint < Constant.REDBAR 
+				toPoint <= 6 && toPoint >= 1 
 				) || (
-				stateColor == Constant.BLACK && fromPoint == Constant.BLACKBAR && 
-				toPoint >= 19 && toPoint < Constant.BLACKBAR );
+				stateColor == Constant.BLACK && 
+				fromPoint == Constant.BLACKBAR && 
+				toPoint >= 19 && toPoint <= 24 );
 	}
 
 	public static boolean inBearOffRange(int toPoint, int stateColor) {
