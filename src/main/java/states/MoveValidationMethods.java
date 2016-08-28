@@ -14,58 +14,56 @@ public class MoveValidationMethods {
 	private static Stack<Checker>[] points = board.getPoint();
 
 	public static boolean basicMoveTests(int fromPoint, int toPoint, int stateColor) {
-		boolean test = (ownChecker(fromPoint, stateColor) && 
-						dieValue(fromPoint, toPoint) && 
-						inBounds(toPoint) && 
-						direction(fromPoint, toPoint, stateColor));
-		return test ? true : false;
+		return	ownChecker(fromPoint, stateColor) &&
+				dieValue(fromPoint, toPoint) && 
+				inBounds(toPoint) && 
+				direction(fromPoint, toPoint, stateColor);
 	}
 
 	public static boolean dieValue(int fromPoint, int toPoint) {
 		int value = Math.abs(toPoint - fromPoint);
-		return (value > 0 && value < 7) ? true : false;
+		return value > 0 && value < 7;
 	}
 
 	public static boolean inBounds(int toPoint) {
-		boolean test = (toPoint > Constant.BLACK && toPoint < Constant.RED);
-		return test ? true : false; 
+		return toPoint > Constant.BLACK && toPoint < Constant.RED;
 	}
 
 	public static boolean ownChecker(int fromPoint, int stateColor) {
-		boolean test = (!points[fromPoint].empty() && points[fromPoint].peek().color == stateColor);
-		return test ? true : false;
+		return !points[fromPoint].empty() && 
+				points[fromPoint].peek().color == stateColor;
 	}
 
 	public static boolean direction(int fromPoint, int toPoint, int stateColor) {
 		int steps = (fromPoint == Constant.REDBAR) ? toPoint : (toPoint - fromPoint);
-		boolean test = (stateColor == Constant.RED && steps > 0 || stateColor == Constant.BLACK && steps < 0);
-		return test ? true : false;
+		return stateColor == Constant.RED && steps > 0 || stateColor == Constant.BLACK && steps < 0;
 	}
 
 	public static boolean emptyOrOwnPoint(int toPoint, int stateColor) {
-		boolean test = (points[toPoint].isEmpty() || points[toPoint].peek().color == stateColor);
-		return test ? true : false;
+		return points[toPoint].isEmpty() || points[toPoint].peek().color == stateColor;
 	}
 
 	public static boolean hit(int toPoint, int stateColor) {
-		boolean test = (points[toPoint].size() == 1 && points[toPoint].peek().color != stateColor);
-		return test ? true : false;
+		return points[toPoint].size() == 1 && points[toPoint].peek().color != stateColor;
 	}
 
 	public static boolean checkerFromBar(int fromPoint, int toPoint, int stateColor) {
-		boolean test = (stateColor == Constant.RED && fromPoint == Constant.REDBAR && 
-				        toPoint <= 6 && toPoint < Constant.REDBAR
-				        || 
-				        stateColor == Constant.BLACK && fromPoint == Constant.BLACKBAR && 
-				        toPoint >= 19 && toPoint < Constant.BLACKBAR);
-		return test ? true : false;
+		return (stateColor == Constant.RED && 
+				fromPoint == Constant.REDBAR && 
+				toPoint <= 6 && toPoint < Constant.REDBAR 
+				) || (
+				stateColor == Constant.BLACK && fromPoint == Constant.BLACKBAR && 
+				toPoint >= 19 && toPoint < Constant.BLACKBAR );
 	}
 
 	public static boolean inBearOffRange(int toPoint, int stateColor) {
-		boolean test = (stateColor == Constant.RED && toPoint >= 20 && toPoint <= 25
-						|| 
-						stateColor == Constant.BLACK && toPoint >= 0 && toPoint <= 5);
-		return test ? true : false;
+		return (stateColor == Constant.RED && 
+				toPoint >= 20 && 
+				toPoint <= 25
+				) || ( 
+				stateColor == Constant.BLACK && 
+				toPoint >= 0 && 
+				toPoint <= 5);
 	}
 	
 	public static boolean availableMovesInBearOff(List<Die> dice, int fromPos){
@@ -189,7 +187,6 @@ public class MoveValidationMethods {
 				toReturn.add(new Integer(toPoint));
 			}
 		}
-
 		return toReturn;
 	}
 
